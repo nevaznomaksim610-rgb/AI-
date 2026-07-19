@@ -2,21 +2,20 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>ИИ Юрист Галина — прототип</title>
-<link rel="stylesheet" href="styles.css?v=5">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#4C9F52">
+<meta name="description" content="ИИ юрист Галина — ответы на юридические вопросы, составление и проверка договоров.">
+<title>ИИ Юрист Галина</title>
+<link rel="icon" href="assets/galina-avatar.png">
+<link rel="apple-touch-icon" href="assets/galina-avatar.png">
+<link rel="stylesheet" href="styles.css?v=6">
 </head>
 <body>
 
-<div class="stage">
+<div class="app">
 
   <!-- ============ ЭКРАН 1 — ОНБОРДИНГ ============ -->
-  <section class="screen-block">
-    <div class="screen-label">Онбординг</div>
-    <div class="phone">
-      <div class="phone-inner">
-
-        <div class="screen screen--onboarding" id="screen-onboarding">
+        <div class="screen screen--onboarding is-active" id="screen-onboarding">
           <div class="ob-hero">
             <img src="assets/galina-desk.png" alt="Галина — юрист с большим стажем" class="ob-hero__img">
           </div>
@@ -38,16 +37,7 @@
           </div>
         </div>
 
-      </div>
-    </div>
-  </section>
-
   <!-- ============ ЭКРАН 2 — ОСНОВНОЙ ============ -->
-  <section class="screen-block">
-    <div class="screen-label">Основной экран</div>
-    <div class="phone">
-      <div class="phone-inner">
-
         <div class="screen screen--main" id="screen-main">
 
           <!-- шапка -->
@@ -319,12 +309,8 @@
 
         </div>
 
-      </div>
-    </div>
-  </section>
-
 </div>
 
-<script src="app.js?v=5"></script>
+<script src="app.js?v=6"></script>
 </body>
 </html>

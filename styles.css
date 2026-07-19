@@ -25,53 +25,43 @@ body{
   min-height:100vh;
 }
 
-/* ---------- раскладка макетов ---------- */
-.stage{
+/* ---------- корпус приложения ---------- */
+body{
   display:flex;
-  flex-wrap:wrap;
-  gap:52px;
-  padding:44px 32px 80px;
+  align-items:center;
   justify-content:center;
-  align-items:flex-start;
-}
-
-.screen-block{ display:flex; flex-direction:column; gap:14px; }
-
-.screen-label{
-  color:var(--label);
-  font-size:17px;
-  font-weight:500;
-  padding-left:6px;
-  letter-spacing:.2px;
-}
-
-/* ---------- корпус телефона ---------- */
-.phone{
-  width:352px;
-  height:748px;
-  background:var(--phone-body);
-  border-radius:var(--radius-phone);
-  padding:10px;
-  box-shadow:0 24px 60px rgba(0,0,0,.55);
-  flex:none;
-}
-.phone-inner{
-  width:100%;
-  height:100%;
-  border-radius:36px;
   overflow:hidden;
-  background:#fff;
-  position:relative;
 }
 
+.app{
+  position:relative;
+  width:100%;
+  height:100vh;
+  height:100dvh;
+  background:#fff;
+  overflow:hidden;
+}
+
+/* на десктопе показываем приложение «в телефоне» */
+@media (min-width:600px) and (min-height:640px){
+  .app{
+    width:392px;
+    height:min(100dvh - 48px, 844px);
+    border-radius:38px;
+    box-shadow:0 24px 70px rgba(0,0,0,.55);
+  }
+}
+
+/* экраны приложения: активен всегда один */
 .screen{
   position:absolute;
-  inset:0;
+  top:0; right:0; bottom:0; left:0;
   background:#fff;
-  display:flex;
   flex-direction:column;
   overflow:hidden;
+  display:none;
 }
+.screen.is-active{ display:flex; }
 
 /* =========================================================
    ЭКРАН 1 — ОНБОРДИНГ
@@ -779,18 +769,9 @@ body{
 .btn-newchat:hover{ background:var(--green-dark); }
 .btn-newchat .ic{ stroke:#fff; width:20px; height:20px; }
 
-/* ---------- адаптив: на телефоне показываем один экран во весь вид ---------- */
-@media (max-width:900px){
-  body{ background:#fff; }
-  .stage{ padding:0; gap:0; }
-  .screen-label{ display:none; }
-  .screen-block{ width:100%; display:none; }
-  .screen-block:first-child{ display:flex; }
-  body.nav-started .screen-block{ display:none; }
-  body.nav-started .screen-block.is-active{ display:flex; }
-  .phone{
-    width:100vw; height:100vh;
-    border-radius:0; padding:0; box-shadow:none;
-  }
-  .phone-inner{ border-radius:0; }
+/* ---------- безопасные зоны на телефонах с вырезом ---------- */
+@supports (padding:env(safe-area-inset-bottom)){
+  .composer-wrap{ padding-bottom:calc(26px + env(safe-area-inset-bottom)); }
+  .ob-footer   { padding-bottom:calc(30px + env(safe-area-inset-bottom)); }
+  .topbar      { padding-top:env(safe-area-inset-top); height:calc(64px + env(safe-area-inset-top)); }
 }

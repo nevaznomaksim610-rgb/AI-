@@ -14,16 +14,13 @@ var state = { mode: null, busy: false };
 
 function $(sel, root){ return (root || document).querySelector(sel); }
 
-/* ---------- переход между экранами (на узких экранах) ---------- */
+/* ---------- переход между экранами ---------- */
 function goTo(id){
   var target = document.getElementById(id);
   if(!target) return;
-  var block = target.closest('.screen-block');
-  document.querySelectorAll('.screen-block').forEach(function(b){
-    b.classList.toggle('is-active', b === block);
+  document.querySelectorAll('.screen').forEach(function(s){
+    s.classList.toggle('is-active', s === target);
   });
-  document.body.classList.add('nav-started');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 /* ---------- выбор режима ---------- */
