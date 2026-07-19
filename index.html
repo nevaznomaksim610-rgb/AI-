@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ИИ Юрист Галина — прототип</title>
+<link rel="stylesheet" href="styles.css?v=5">
+</head>
+<body>
+
+<div class="stage">
+
+  <!-- ============ ЭКРАН 1 — ОНБОРДИНГ ============ -->
+  <section class="screen-block">
+    <div class="screen-label">Онбординг</div>
+    <div class="phone">
+      <div class="phone-inner">
+
+        <div class="screen screen--onboarding" id="screen-onboarding">
+          <div class="ob-hero">
+            <img src="assets/galina-desk.png" alt="Галина — юрист с большим стажем" class="ob-hero__img">
+          </div>
+
+          <div class="ob-body">
+            <div class="ob-dots">
+              <span class="ob-dot ob-dot--sm"></span>
+              <span class="ob-dot ob-dot--lg"></span>
+            </div>
+            <div class="ob-bubble">
+              Добрый день! Меня зовут Галина.<br>
+              Помогу вам решить любой<br>
+              юридический вопрос
+            </div>
+          </div>
+
+          <div class="ob-footer">
+            <button class="btn-primary" onclick="goTo('screen-main')">Начать</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ЭКРАН 2 — ОСНОВНОЙ ============ -->
+  <section class="screen-block">
+    <div class="screen-label">Основной экран</div>
+    <div class="phone">
+      <div class="phone-inner">
+
+        <div class="screen screen--main" id="screen-main">
+
+          <!-- шапка -->
+          <header class="topbar">
+            <button class="icon-btn" onclick="openDrawer(this)" aria-label="Меню">
+              <svg viewBox="0 0 24 24" class="ic ic--panel">
+                <rect x="2.2" y="3.2" width="19.6" height="17.6" rx="4.2"/>
+                <line x1="9.6" y1="3.2" x2="9.6" y2="20.8"/>
+              </svg>
+            </button>
+            <button class="balance" onclick="openSheet()">30₽</button>
+          </header>
+
+          <!-- центр: стартовый вид -->
+          <main class="main-center" data-view="home">
+            <div class="greeting">
+              <img src="assets/galina-avatar.png" alt="" class="greeting__ava">
+              <h1 class="greeting__title" data-title>Чем могу помочь?</h1>
+            </div>
+
+            <ul class="actions">
+              <li class="action" data-mode="law" onclick="selectMode('law')">
+                <svg viewBox="0 0 24 24" class="ic ic--search">
+                  <circle cx="10.5" cy="10.5" r="7"/>
+                  <line x1="15.6" y1="15.6" x2="21" y2="21"/>
+                </svg>
+                <span>Найти закон</span>
+              </li>
+              <li class="action" data-mode="create" onclick="selectMode('create')">
+                <svg viewBox="0 0 24 24" class="ic ic--pen">
+                  <path d="M3 21l1.2-4.2L16.3 4.7a2.4 2.4 0 013.4 0l.6.6a2.4 2.4 0 010 3.4L8.2 20.8 3 21z"/>
+                </svg>
+                <span>Составить договор</span>
+              </li>
+              <li class="action" data-mode="check" onclick="selectMode('check')">
+                <svg viewBox="0 0 24 24" class="ic ic--doc">
+                  <path d="M6 2.6h8L19.4 8v13.4H6z" />
+                  <path d="M14 2.6V8h5.4"/>
+                </svg>
+                <span>Проверить договор</span>
+              </li>
+            </ul>
+          </main>
+
+          <!-- центр: лента чата -->
+          <div class="chat" data-view="chat" hidden>
+            <div class="chat__scroll" data-feed></div>
+          </div>
+
+          <!-- поле ввода -->
+          <div class="composer-wrap">
+            <div class="composer">
+              <div class="composer__field"
+                   contenteditable="true"
+                   data-field
+                   data-placeholder="Задайте юридический вопрос"></div>
+              <div class="composer__row">
+                <button class="plus-btn" onclick="toggleAttach(this)" aria-label="Прикрепить">
+                  <svg viewBox="0 0 24 24" class="ic ic--plus">
+                    <line x1="12" y1="4.5" x2="12" y2="19.5"/>
+                    <line x1="4.5" y1="12" x2="19.5" y2="12"/>
+                  </svg>
+                </button>
+                <div class="composer__right">
+                  <button class="mic-btn" aria-label="Голос">
+                    <svg viewBox="0 0 24 24" class="ic ic--mic">
+                      <rect x="8.6" y="2.2" width="6.8" height="12" rx="3.4"/>
+                      <path d="M4.8 11.2a7.2 7.2 0 0014.4 0"/>
+                      <line x1="12" y1="18.4" x2="12" y2="22"/>
+                    </svg>
+                  </button>
+                  <button class="call-btn" onclick="openCall()">
+                    <span class="wave">
+                      <i></i><i></i><i></i><i></i><i></i>
+                    </span>
+                    Созвон
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- меню вложений -->
+            <div class="attach-menu" data-attach>
+              <div class="attach-item">
+                <span class="attach-ic">
+                  <svg viewBox="0 0 24 24" class="ic ic--doc">
+                    <path d="M6 2.6h8L19.4 8v13.4H6z"/>
+                    <path d="M14 2.6V8h5.4"/>
+                  </svg>
+                </span>
+                Файлы
+              </div>
+              <div class="attach-item">
+                <span class="attach-ic">
+                  <svg viewBox="0 0 24 24" class="ic ic--cam">
+                    <rect x="2.4" y="5.6" width="19.2" height="14.4" rx="3.4"/>
+                    <circle cx="12" cy="12.8" r="3.6"/>
+                    <line x1="8.4" y1="5.6" x2="9.8" y2="3.2"/>
+                  </svg>
+                </span>
+                Камера
+              </div>
+              <div class="attach-item">
+                <span class="attach-ic">
+                  <svg viewBox="0 0 24 24" class="ic ic--img">
+                    <rect x="2.4" y="4.4" width="19.2" height="15.2" rx="3.4"/>
+                    <circle cx="8.2" cy="9.8" r="1.9"/>
+                    <path d="M3.4 17.4l5.2-5 4.2 3.9 3.2-2.7 4.6 4.2"/>
+                  </svg>
+                </span>
+                Галерея
+              </div>
+              <div class="attach-item attach-item--close" onclick="closeAttach()">
+                <span class="attach-ic">
+                  <svg viewBox="0 0 24 24" class="ic ic--x">
+                    <line x1="5.5" y1="5.5" x2="18.5" y2="18.5"/>
+                    <line x1="18.5" y1="5.5" x2="5.5" y2="18.5"/>
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ШТОРКА С ТАРИФОМ -->
+          <div class="sheet-scrim" onclick="closeSheet()"></div>
+          <div class="sheet">
+            <div class="sheet__grab"></div>
+            <div class="sheet__title">1 запрос = 3 рубля</div>
+            <div class="sheet__note">Списывается за каждый ответ Галины.<br>Созвон — 3 рубля за минуту.</div>
+            <div class="sheet__balance">
+              <span>На счету</span>
+              <b>30 ₽</b>
+            </div>
+            <div class="sheet__hint">Хватит на 10 запросов</div>
+            <button class="btn-primary btn-primary--sm">Пополнить</button>
+          </div>
+
+          <!-- ЭКРАН СОЗВОНА -->
+          <div class="call">
+            <header class="topbar">
+              <button class="icon-btn" onclick="closeCall()" aria-label="Назад">
+                <svg viewBox="0 0 24 24" class="ic ic--back">
+                  <path d="M14.5 5 L7.5 12 l7 7"/>
+                </svg>
+              </button>
+              <button class="balance" onclick="openSheet()">30₽</button>
+            </header>
+
+            <div class="call__body">
+              <img src="assets/galina-avatar.png" alt="" class="call__ava" data-call-ava>
+
+              <button class="call__btn" onclick="toggleMic()" data-call-btn aria-label="Микрофон">
+                <!-- микрофон включён -->
+                <svg viewBox="0 0 24 24" class="ic call__ic call__ic--on">
+                  <rect x="9" y="2.6" width="6" height="11.4" rx="3"/>
+                  <path d="M5.2 11.4a6.8 6.8 0 0013.6 0"/>
+                  <line x1="12" y1="18.2" x2="12" y2="21.4"/>
+                </svg>
+                <!-- микрофон выключен -->
+                <svg viewBox="0 0 24 24" class="ic call__ic call__ic--off">
+                  <rect x="9" y="2.6" width="6" height="11.4" rx="3"/>
+                  <path d="M5.2 11.4a6.8 6.8 0 0013.6 0"/>
+                  <line x1="12" y1="18.2" x2="12" y2="21.4"/>
+                  <line x1="4" y1="21" x2="20" y2="3"/>
+                </svg>
+                <!-- Галина говорит -->
+                <span class="call__wave">
+                  <i></i><i></i><i></i><i></i><i></i>
+                </span>
+              </button>
+
+              <div class="call__status" data-call-status>Говорите, я слушаю</div>
+              <button class="call__arc" onclick="closeCall()">Завершить</button>
+            </div>
+          </div>
+
+          <!-- РАЗДЕЛЫ МЕНЮ -->
+          <div class="page">
+            <header class="topbar">
+              <button class="icon-btn" onclick="closePage()" aria-label="Назад">
+                <svg viewBox="0 0 24 24" class="ic ic--back">
+                  <path d="M14.5 5 L7.5 12 l7 7"/>
+                </svg>
+              </button>
+              <button class="balance" onclick="openSheet()">30₽</button>
+            </header>
+            <div class="page__scroll">
+              <h2 class="page__title" data-page-title></h2>
+              <div data-page-body></div>
+            </div>
+          </div>
+
+          <!-- САЙДБАР -->
+          <div class="drawer-scrim" onclick="closeDrawer()"></div>
+          <aside class="drawer">
+            <div class="drawer__head">
+              <div class="acc">
+                <span class="acc__ava">Е</span>
+                <span class="acc__name">Название акка</span>
+              </div>
+              <button class="icon-btn" onclick="closeDrawer()" aria-label="Закрыть">
+                <svg viewBox="0 0 24 24" class="ic ic--panel">
+                  <rect x="2.2" y="3.2" width="19.6" height="17.6" rx="4.2"/>
+                  <line x1="9.6" y1="3.2" x2="9.6" y2="20.8"/>
+                </svg>
+              </button>
+            </div>
+
+            <div class="drawer__scroll">
+              <div class="drawer__group">Чаты</div>
+              <a class="drawer__item">Закон 130 ФЗ</a>
+              <a class="drawer__item">Закон 130 ФЗ</a>
+              <a class="drawer__item">Закон 130 ФЗ</a>
+              <a class="drawer__item">Закон 130 ФЗ</a>
+
+              <div class="drawer__group drawer__group--mt">Мои договоры</div>
+              <a class="drawer__item">Договор 1</a>
+              <a class="drawer__item">Договор 2</a>
+              <a class="drawer__item">Договор 3</a>
+              <a class="drawer__item">Договор 3</a>
+              <a class="drawer__item">Договор 1</a>
+              <a class="drawer__item">Договор 2</a>
+              <a class="drawer__item">Договор 3</a>
+              <a class="drawer__item">Договор 3</a>
+              <a class="drawer__item">Договор 1</a>
+              <a class="drawer__item">Договор 2</a>
+              <a class="drawer__item">Договор 3</a>
+            </div>
+
+            <div class="drawer__foot">
+              <a class="drawer__link" onclick="openPage('consult')">
+                <svg viewBox="0 0 24 24" class="ic ic--consult">
+                  <path d="M3.2 5.6h11.2v8.4H7.4L3.2 17.2z"/>
+                  <path d="M9.6 9.2h11.2v8.4l-4.2 3.2v-3.2h-3.5"/>
+                </svg>
+                Консультация
+              </a>
+              <a class="drawer__link" onclick="openPage('news')">
+                <svg viewBox="0 0 24 24" class="ic ic--news">
+                  <rect x="3.2" y="4.2" width="17.6" height="15.6" rx="2.6"/>
+                  <line x1="6.6" y1="8.4" x2="14" y2="8.4"/>
+                  <line x1="6.6" y1="12" x2="17.4" y2="12"/>
+                  <line x1="6.6" y1="15.6" x2="17.4" y2="15.6"/>
+                </svg>
+                Новости
+              </a>
+              <a class="drawer__link" onclick="openPage('reviews')">
+                <svg viewBox="0 0 24 24" class="ic ic--star">
+                  <path d="M12 3.2l2.7 5.5 6 .9-4.3 4.2 1 6-5.4-2.8-5.4 2.8 1-6L3.3 9.6l6-.9z"/>
+                </svg>
+                Отзывы
+              </a>
+              <a class="drawer__link" onclick="openPage('support')">
+                <svg viewBox="0 0 24 24" class="ic ic--support">
+                  <path d="M4.2 15.4v-3.6a7.8 7.8 0 1115.6 0v3.6"/>
+                  <rect x="2.6" y="13.6" width="4" height="6" rx="2"/>
+                  <rect x="17.4" y="13.6" width="4" height="6" rx="2"/>
+                </svg>
+                Поддержка
+              </a>
+              <button class="btn-newchat" onclick="newChat()">
+                <svg viewBox="0 0 24 24" class="ic ic--chat">
+                  <path d="M3.4 5.4h17.2v11H9.2l-5.8 4.2z"/>
+                </svg>
+                Новый чат
+              </button>
+            </div>
+          </aside>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script src="app.js?v=5"></script>
+</body>
+</html>
