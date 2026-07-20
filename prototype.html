@@ -383,6 +383,25 @@ body{
 }
 .call-btn:hover{ background:var(--green-dark); }
 
+/* кнопка отправки: видна только когда в поле есть текст */
+.send-btn{
+  border:0;
+  background:var(--green);
+  width:38px; height:38px;
+  border-radius:50%;
+  display:none;
+  align-items:center; justify-content:center;
+  cursor:pointer;
+  transition:background .15s ease;
+}
+.send-btn:hover{ background:var(--green-dark); }
+.ic--send{ width:22px; height:22px; stroke:#fff; stroke-width:2.2; }
+
+/* когда есть текст — прячем микрофон и «Созвон», показываем отправку */
+.composer.has-text .mic-btn,
+.composer.has-text .call-btn{ display:none; }
+.composer.has-text .send-btn{ display:flex; }
+
 .wave{ display:flex; align-items:center; gap:2.5px; height:17px; }
 .wave i{ width:2.6px; border-radius:2px; background:#fff; display:block; }
 .wave i:nth-child(1){ height:7px; }
@@ -894,6 +913,12 @@ body{
                     </span>
                     Созвон
                   </button>
+                  <button class="send-btn" onclick="send()" aria-label="Отправить">
+                    <svg viewBox="0 0 24 24" class="ic ic--send">
+                      <line x1="12" y1="20" x2="12" y2="5"/>
+                      <path d="M6 11l6-6 6 6"/>
+                    </svg>
+                  </button>
                 </div>
               </div>
             </div>
@@ -1134,6 +1159,13 @@ function selectMode(key){
   focusEnd(field);
 }
 
+/* показываем кнопку отправки, когда в поле есть текст */
+function refreshComposer(){
+  var field = $('[data-field]');
+  var has = field.textContent.trim().length > 0;
+  $('.composer').classList.toggle('has-text', has);
+}
+
 function focusEnd(el){
   el.focus();
   var r = document.createRange();
@@ -1158,6 +1190,7 @@ function send(){
   field.textContent = '';
   field.removeAttribute('data-prefix');
   state.mode = null;
+  refreshComposer();
   document.querySelectorAll('.action').forEach(function(a){ a.classList.remove('is-active'); });
 
   openChat();
@@ -1295,6 +1328,10 @@ document.addEventListener('keydown', function(e){
     e.preventDefault();
     send();
   }
+});
+
+document.addEventListener('input', function(e){
+  if(e.target.closest && e.target.closest('[data-field]')) refreshComposer();
 });
 
 /* поле хранит только текст — чистим вставку из буфера */
@@ -1513,6 +1550,7 @@ function newChat(){
   field.textContent = '';
   field.removeAttribute('data-prefix');
   state.mode = null;
+  refreshComposer();
   setBusy(false);
 
   $('[data-title]').textContent = 'Чем могу помочь?';

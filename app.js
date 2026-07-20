@@ -41,6 +41,13 @@ function selectMode(key){
   focusEnd(field);
 }
 
+/* показываем кнопку отправки, когда в поле есть текст */
+function refreshComposer(){
+  var field = $('[data-field]');
+  var has = field.textContent.trim().length > 0;
+  $('.composer').classList.toggle('has-text', has);
+}
+
 function focusEnd(el){
   el.focus();
   var r = document.createRange();
@@ -65,6 +72,7 @@ function send(){
   field.textContent = '';
   field.removeAttribute('data-prefix');
   state.mode = null;
+  refreshComposer();
   document.querySelectorAll('.action').forEach(function(a){ a.classList.remove('is-active'); });
 
   openChat();
@@ -202,6 +210,10 @@ document.addEventListener('keydown', function(e){
     e.preventDefault();
     send();
   }
+});
+
+document.addEventListener('input', function(e){
+  if(e.target.closest && e.target.closest('[data-field]')) refreshComposer();
 });
 
 /* поле хранит только текст — чистим вставку из буфера */
@@ -420,6 +432,7 @@ function newChat(){
   field.textContent = '';
   field.removeAttribute('data-prefix');
   state.mode = null;
+  refreshComposer();
   setBusy(false);
 
   $('[data-title]').textContent = 'Чем могу помочь?';
