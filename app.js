@@ -392,6 +392,28 @@ function sendModal(){
 }
 
 /* =========================================================
+   ЭКРАНЫ НАСТРОЕК И ПРОФИЛЯ
+   ========================================================= */
+function openPanel(name){
+  var p = $('[data-panel="' + name + '"]');
+  if(!p) return;
+  p.querySelector('.panel__scroll').scrollTop = 0;
+  p.classList.add('is-open');
+  closeDrawer();
+}
+
+function closePanel(name){
+  var p = $('[data-panel="' + name + '"]');
+  if(p) p.classList.remove('is-open');
+}
+
+function closeAllPanels(){
+  document.querySelectorAll('.panel').forEach(function(p){
+    p.classList.remove('is-open');
+  });
+}
+
+/* =========================================================
    ШТОРКА С ТАРИФОМ
    ========================================================= */
 function openSheet(){
@@ -507,6 +529,7 @@ function newChat(){
   closePage();
   closeCall();
   closeModal();
+  closeAllPanels();
   clearTimeout(callTimer);
 
   feed().innerHTML = '';
@@ -585,6 +608,7 @@ document.addEventListener('click', function(e){
 /* Esc закрывает всё */
 document.addEventListener('keydown', function(e){
   if(e.key === 'Escape'){
-    closeAttach(); closeDrawer(); closeSheet(); closePage(); closeCall(); closeModal();
+    closeAttach(); closeDrawer(); closeSheet(); closePage();
+    closeCall(); closeModal(); closeAllPanels();
   }
 });
