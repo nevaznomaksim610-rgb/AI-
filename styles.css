@@ -139,8 +139,17 @@ body{
   justify-content:space-between;
 }
 
+/* рабочая область: на телефоне занимает весь экран, на десктопе — колонку справа */
+.workspace{
+  position:absolute;
+  top:0; right:0; bottom:0; left:0;
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+}
+
 /* шапка главного экрана висит поверх ленты: контент уезжает под неё размытым */
-.screen--main > .topbar{
+.workspace > .topbar{
   position:absolute;
   top:0; left:0; right:0;
   z-index:8;
@@ -167,6 +176,8 @@ body{
   letter-spacing:-.6px;
   color:var(--ink);
 }
+/* «Юрист» рядом с логотипом — только на десктопе */
+.brand__suffix{ display:none; }
 
 .balance{
   background:var(--grey-bg);
@@ -1039,6 +1050,159 @@ body{
 }
 .btn-newchat:hover{ background:var(--green-dark); }
 .btn-newchat .ic{ stroke:#fff; width:20px; height:20px; }
+
+/* =========================================================
+   ДЕСКТОП — сайдбар всегда на экране, контент справа
+   Мобильная вёрстка выше не затрагивается
+   ========================================================= */
+@media (min-width:900px){
+
+  body{ background:#fff; }
+
+  .app{
+    width:100%;
+    height:100vh;
+    max-height:none;
+    border-radius:0;
+    box-shadow:none;
+  }
+
+  /* главный экран становится двухколоночным */
+  .screen--main{ flex-direction:row; }
+
+  /* ---- сайдбар: постоянный, не выезжающий ---- */
+  .drawer{
+    position:relative;
+    order:-1;
+    flex:none;
+    width:340px;
+    transform:none;
+    border-radius:0 26px 26px 0;
+    box-shadow:0 0 0 1px #ECECEC;
+    z-index:1;
+  }
+  .drawer-scrim{ display:none; }
+  .screen--main.no-sidebar .drawer{ display:none; }
+
+  .drawer__head{ height:70px; padding:0 20px 0 18px; }
+  .acc__name{ font-size:15px; }
+  .drawer__group,
+  .drawer__item{ font-size:15px; }
+  .drawer__item{ padding:7px 22px; }
+  .drawer__link{ font-size:15px; }
+  .drawer__foot{ padding:12px 20px; gap:14px; }
+  .drawer__newchat{ padding:12px 20px 18px; }
+
+  /* ---- рабочая область ---- */
+  .workspace{ position:relative; flex:1; }
+
+  .workspace > .topbar{
+    position:relative;
+    height:76px;
+    padding:0 34px;
+    background:none;
+    -webkit-backdrop-filter:none;
+            backdrop-filter:none;
+  }
+  /* кнопка меню нужна только когда сайдбар свёрнут */
+  .workspace .icon-btn{ display:none; }
+  .screen--main.no-sidebar .workspace .icon-btn{ display:flex; }
+
+  .brand__mark{ width:34px; height:25px; }
+  .brand__name{ font-size:29px; letter-spacing:-.8px; }
+  .brand__suffix{
+    display:inline;
+    margin-left:12px;
+    font-size:26px;
+    font-weight:800;
+    letter-spacing:-.5px;
+    color:var(--green);
+  }
+  .balance{ font-size:16px; padding:9px 17px; }
+
+  /* ---- стартовый вид: приветствие и поле по центру ---- */
+  .main-center{
+    flex:0 0 auto;
+    margin-top:auto;
+    align-items:center;
+    padding:0 34px;
+    gap:0;
+  }
+  .greeting{ gap:16px; }
+  .greeting__ava{ width:46px; height:46px; }
+  .greeting__title{ font-size:23px; }
+
+  /* на макете десктопа списка режимов нет */
+  .actions{ display:none; }
+
+  .composer-wrap{
+    margin:26px auto auto;
+    padding:0 34px 34px;
+    width:100%;
+    max-width:668px;
+  }
+  /* в переписке поле уходит вниз */
+  .chat:not([hidden]) ~ .composer-wrap{ margin-top:0; }
+
+  .composer{ border-radius:22px; padding:18px 16px 14px; }
+  .attach-menu{ left:34px; }
+
+  /* ---- лента чата ---- */
+  .chat__scroll{
+    padding:16px 34px 12px;
+    width:100%;
+    max-width:736px;
+    margin:0 auto;
+  }
+  .msg--user .bubble{ max-width:70%; }
+
+  /* ---- оверлеи не залезают на сайдбар ---- */
+  .call, .page{ left:340px; }
+  .screen--main.no-sidebar .call,
+  .screen--main.no-sidebar .page{ left:0; }
+
+  .page__scroll{ max-width:720px; margin:0 auto; width:100%; padding:4px 34px 30px; }
+  .call__ava{ margin-top:8%; width:150px; height:150px; }
+
+  /* окно раздела по центру рабочей области */
+  .modal{
+    left:calc(50% + 170px);
+    width:520px;
+    height:56%;
+    max-height:560px;
+  }
+  .screen--main.no-sidebar .modal{ left:50%; }
+  .modal__body{ font-size:15.5px; }
+  .review__text{ font-size:12px; }
+  .review__name{ font-size:14px; }
+  .modal__note{ font-size:11.5px; }
+
+  /* шторка тарифа — тоже окном по центру */
+  .sheet{
+    left:calc(50% + 170px);
+    right:auto;
+    top:50%;
+    bottom:auto;
+    width:420px;
+    height:auto;
+    border-radius:26px;
+    padding:20px 26px 26px;
+    transform:translate(-50%,-46%);
+  }
+  .sheet.is-open{ transform:translate(-50%,-50%); }
+  .screen--main.no-sidebar .sheet{ left:50%; }
+  .sheet__grab{ display:none; }
+  .sheet__balance{ margin-top:24px; }
+
+  /* онбординг: карточкой по центру */
+  .screen--onboarding{
+    width:100%;
+    max-width:420px;
+    left:50%;
+    right:auto;
+    transform:translateX(-50%);
+  }
+}
 
 /* ---------- безопасные зоны на телефонах с вырезом ---------- */
 @supports (padding:env(safe-area-inset-bottom)){

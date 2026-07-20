@@ -8,7 +8,7 @@
 <title>ИИ Юрист Галина</title>
 <link rel="icon" href="assets/galina-avatar.png">
 <link rel="apple-touch-icon" href="assets/galina-avatar.png">
-<link rel="stylesheet" href="styles.css?v=12">
+<link rel="stylesheet" href="styles.css?v=13">
 </head>
 <body>
 
@@ -40,18 +40,21 @@
   <!-- ============ ЭКРАН 2 — ОСНОВНОЙ ============ -->
         <div class="screen screen--main" id="screen-main">
 
+          <div class="workspace">
+
           <!-- шапка -->
           <header class="topbar">
             <div class="topbar__left">
-              <button class="icon-btn" onclick="openDrawer(this)" aria-label="Меню">
+              <button class="icon-btn" onclick="menuButton(this)" aria-label="Меню">
                 <svg viewBox="0 0 24 24" class="ic ic--panel">
                   <rect x="2.2" y="3.2" width="19.6" height="17.6" rx="4.2"/>
                   <line x1="9.6" y1="3.2" x2="9.6" y2="20.8"/>
                 </svg>
               </button>
-              <span class="brand" aria-label="Windexs">
+              <span class="brand" aria-label="Windexs Юрист">
                 <img src="assets/windex-mark.png" alt="" class="brand__mark">
                 <span class="brand__name">indexs</span>
+                <span class="brand__suffix">Юрист</span>
               </span>
             </div>
             <button class="balance" onclick="openSheet()">30₽</button>
@@ -174,6 +177,8 @@
               </div>
             </div>
           </div>
+
+          </div><!-- /.workspace -->
 
           <!-- ОКНО РАЗДЕЛА: Поддержка / Отзывы / Почта -->
           <div class="modal-scrim" onclick="closeModal()"></div>
@@ -299,7 +304,7 @@
                 <span class="acc__ava">Е</span>
                 <span class="acc__name">Название акка</span>
               </div>
-              <button class="icon-btn" onclick="closeDrawer()" aria-label="Закрыть">
+              <button class="icon-btn" onclick="toggleSidebar()" aria-label="Свернуть меню">
                 <svg viewBox="0 0 24 24" class="ic ic--panel">
                   <rect x="2.2" y="3.2" width="19.6" height="17.6" rx="4.2"/>
                   <line x1="9.6" y1="3.2" x2="9.6" y2="20.8"/>
@@ -366,9 +371,10 @@
 
 </div>
 
-<script src="app.js?v=12"></script>
+<script src="app.js?v=13"></script>
 </body>
 </html>
+
 
 
 

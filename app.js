@@ -545,16 +545,35 @@ function closeAttach(){
   });
 }
 
-/* ---------- сайдбар ---------- */
+/* ---------- сайдбар ----------
+   На телефоне выезжает поверх экрана, на десктопе стоит постоянно
+   и кнопка его сворачивает.                                        */
+function isDesktop(){
+  return window.matchMedia('(min-width:900px)').matches;
+}
+
 function openDrawer(btn){
   var screen = btn.closest('.screen');
   screen.querySelector('.drawer').classList.add('is-open');
   screen.querySelector('.drawer-scrim').classList.add('is-open');
 }
+
 function closeDrawer(){
   document.querySelectorAll('.drawer, .drawer-scrim').forEach(function(el){
     el.classList.remove('is-open');
   });
+}
+
+/* кнопка в шапке */
+function menuButton(btn){
+  if(isDesktop()) $('.screen--main').classList.remove('no-sidebar');
+  else            openDrawer(btn);
+}
+
+/* кнопка внутри сайдбара */
+function toggleSidebar(){
+  if(isDesktop()) $('.screen--main').classList.add('no-sidebar');
+  else            closeDrawer();
 }
 
 /* клик мимо меню вложений закрывает его */
