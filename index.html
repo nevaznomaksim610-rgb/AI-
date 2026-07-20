@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
@@ -8,7 +8,7 @@
 <title>ИИ Юрист Галина</title>
 <link rel="icon" href="assets/galina-avatar.png">
 <link rel="apple-touch-icon" href="assets/galina-avatar.png">
-<link rel="stylesheet" href="styles.css?v=8">
+<link rel="stylesheet" href="styles.css?v=9">
 </head>
 <body>
 
@@ -90,6 +90,7 @@
           <!-- поле ввода -->
           <div class="composer-wrap">
             <div class="composer">
+              <div class="composer__files" data-files></div>
               <div class="composer__field"
                    contenteditable="true"
                    data-field
@@ -109,11 +110,10 @@
                       <line x1="12" y1="18.4" x2="12" y2="22"/>
                     </svg>
                   </button>
-                  <button class="call-btn" onclick="openCall()">
+                  <button class="call-btn" onclick="openCall()" aria-label="Созвон">
                     <span class="wave">
                       <i></i><i></i><i></i><i></i><i></i>
                     </span>
-                    Созвон
                   </button>
                   <button class="send-btn" onclick="send()" aria-label="Отправить">
                     <svg viewBox="0 0 24 24" class="ic ic--send">
@@ -127,7 +127,7 @@
 
             <!-- меню вложений -->
             <div class="attach-menu" data-attach>
-              <div class="attach-item">
+              <div class="attach-item" onclick="uploadFile()">
                 <span class="attach-ic">
                   <svg viewBox="0 0 24 24" class="ic ic--doc">
                     <path d="M6 2.6h8L19.4 8v13.4H6z"/>
@@ -136,7 +136,7 @@
                 </span>
                 Файлы
               </div>
-              <div class="attach-item">
+              <div class="attach-item" onclick="uploadFile()">
                 <span class="attach-ic">
                   <svg viewBox="0 0 24 24" class="ic ic--cam">
                     <rect x="2.4" y="5.6" width="19.2" height="14.4" rx="3.4"/>
@@ -146,7 +146,7 @@
                 </span>
                 Камера
               </div>
-              <div class="attach-item">
+              <div class="attach-item" onclick="uploadFile()">
                 <span class="attach-ic">
                   <svg viewBox="0 0 24 24" class="ic ic--img">
                     <rect x="2.4" y="4.4" width="19.2" height="15.2" rx="3.4"/>
@@ -164,6 +164,14 @@
                   </svg>
                 </span>
               </div>
+            </div>
+          </div>
+
+          <!-- МИНИ-ЭКРАН ЗАГРУЗКИ ФАЙЛА -->
+          <div class="upload">
+            <div class="upload__card">
+              <span class="upload__spinner"></span>
+              <div class="upload__text">Загружаю файл</div>
             </div>
           </div>
 
@@ -317,6 +325,7 @@
 
 </div>
 
-<script src="app.js?v=8"></script>
+<script src="app.js?v=9"></script>
 </body>
 </html>
+

@@ -10,7 +10,7 @@ var MODES = {
   check:  'Проверь договор:'
 };
 
-var state = { mode: null, busy: false };
+var state = { mode: null, busy: false, files: [], fileSeq: 0 };
 
 function $(sel, root){ return (root || document).querySelector(sel); }
 
@@ -41,11 +41,65 @@ function selectMode(key){
   focusEnd(field);
 }
 
-/* показываем кнопку отправки, когда в поле есть текст */
+/* кнопка отправки видна, когда есть текст или прикреплённые файлы */
 function refreshComposer(){
   var field = $('[data-field]');
-  var has = field.textContent.trim().length > 0;
+  var has = field.textContent.trim().length > 0 || state.files.length > 0;
   $('.composer').classList.toggle('has-text', has);
+}
+
+/* =========================================================
+   ФАЙЛЫ — загрузка тут фиктивная, просто показываем процесс
+   ========================================================= */
+function uploadFile(){
+  if(state.busy) return;
+  closeAttach();
+
+  var overlay = $('.upload');
+  overlay.classList.add('is-open');
+
+  setTimeout(function(){
+    overlay.classList.remove('is-open');
+    state.fileSeq += 1;
+    state.files.push('File' + state.fileSeq);
+    renderFiles();
+    focusEnd($('[data-field]'));
+  }, 1600);
+}
+
+function removeFile(name){
+  state.files = state.files.filter(function(f){ return f !== name; });
+  renderFiles();
+}
+
+function renderFiles(){
+  var box = $('[data-files]');
+  box.innerHTML = '';
+
+  state.files.forEach(function(name){
+    var chip = document.createElement('span');
+    chip.className = 'file-chip';
+
+    var label = document.createElement('span');
+    label.className = 'file-chip__name';
+    label.textContent = name;
+
+    var x = document.createElement('button');
+    x.className = 'file-chip__x';
+    x.setAttribute('aria-label', 'Убрать ' + name);
+    x.innerHTML = '<svg viewBox="0 0 24 24" class="ic">' +
+                    '<line x1="5.5" y1="5.5" x2="18.5" y2="18.5"/>' +
+                    '<line x1="18.5" y1="5.5" x2="5.5" y2="18.5"/>' +
+                  '</svg>';
+    x.onclick = function(){ removeFile(name); };
+
+    chip.appendChild(label);
+    chip.appendChild(x);
+    box.appendChild(chip);
+  });
+
+  box.classList.toggle('has-files', state.files.length > 0);
+  refreshComposer();
 }
 
 function focusEnd(el){
@@ -64,19 +118,21 @@ function send(){
 
   var field = $('[data-field]');
   var text  = field.textContent.trim();
-  if(!text) return;
+  var files = state.files.slice();
+  if(!text && !files.length) return;
 
   var mode = state.mode;
 
-  // очищаем поле и сбрасываем режим
+  // очищаем поле, файлы и сбрасываем режим
   field.textContent = '';
   field.removeAttribute('data-prefix');
   state.mode = null;
-  refreshComposer();
+  state.files = [];
+  renderFiles();
   document.querySelectorAll('.action').forEach(function(a){ a.classList.remove('is-active'); });
 
   openChat();
-  addUserMessage(mode, text);
+  addUserMessage(mode, text, files);
 
   if(mode === 'create') runCreateFlow();
   else                  runAnswerFlow();
@@ -97,12 +153,24 @@ function scrollDown(){
   f.scrollTop = f.scrollHeight;
 }
 
-function addUserMessage(mode, text){
+function addUserMessage(mode, text, files){
   var wrap = document.createElement('div');
   wrap.className = 'msg msg--user';
 
   var bubble = document.createElement('div');
   bubble.className = 'bubble';
+
+  if(files && files.length){
+    var box = document.createElement('div');
+    box.className = 'bubble__files';
+    files.forEach(function(name){
+      var f = document.createElement('span');
+      f.className = 'bubble__file';
+      f.textContent = name;
+      box.appendChild(f);
+    });
+    bubble.appendChild(box);
+  }
 
   if(mode){
     var pfx = document.createElement('span');
@@ -432,7 +500,8 @@ function newChat(){
   field.textContent = '';
   field.removeAttribute('data-prefix');
   state.mode = null;
-  refreshComposer();
+  state.files = [];
+  renderFiles();
   setBusy(false);
 
   $('[data-title]').textContent = 'Чем могу помочь?';
