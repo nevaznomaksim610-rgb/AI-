@@ -8,7 +8,7 @@
 <title>ИИ Юрист Галина</title>
 <link rel="icon" href="assets/galina-avatar.png">
 <link rel="apple-touch-icon" href="assets/galina-avatar.png">
-<link rel="stylesheet" href="styles.css?v=9">
+<link rel="stylesheet" href="styles.css?v=10">
 </head>
 <body>
 
@@ -59,23 +59,25 @@
             </div>
 
             <ul class="actions">
-              <li class="action" data-mode="law" onclick="selectMode('law')">
-                <svg viewBox="0 0 24 24" class="ic ic--search">
-                  <circle cx="10.5" cy="10.5" r="7"/>
-                  <line x1="15.6" y1="15.6" x2="21" y2="21"/>
-                </svg>
-                <span>Найти закон</span>
-              </li>
-              <li class="action" data-mode="create" onclick="selectMode('create')">
+              <li class="action" data-mode="sign" onclick="selectMode('sign')">
                 <svg viewBox="0 0 24 24" class="ic ic--pen">
                   <path d="M3 21l1.2-4.2L16.3 4.7a2.4 2.4 0 013.4 0l.6.6a2.4 2.4 0 010 3.4L8.2 20.8 3 21z"/>
+                </svg>
+                <span>Подписать документ</span>
+              </li>
+              <li class="action" data-mode="create" onclick="selectMode('create')">
+                <svg viewBox="0 0 24 24" class="ic ic--doc">
+                  <path d="M6 2.6h8L19.4 8v13.4H6z"/>
+                  <path d="M14 2.6V8h5.4"/>
+                  <line x1="9" y1="12.4" x2="16.4" y2="12.4"/>
+                  <line x1="9" y1="16.2" x2="16.4" y2="16.2"/>
                 </svg>
                 <span>Составить договор</span>
               </li>
               <li class="action" data-mode="check" onclick="selectMode('check')">
-                <svg viewBox="0 0 24 24" class="ic ic--doc">
-                  <path d="M6 2.6h8L19.4 8v13.4H6z" />
-                  <path d="M14 2.6V8h5.4"/>
+                <svg viewBox="0 0 24 24" class="ic ic--search">
+                  <circle cx="10.5" cy="10.5" r="7"/>
+                  <line x1="15.6" y1="15.6" x2="21" y2="21"/>
                 </svg>
                 <span>Проверить договор</span>
               </li>
@@ -325,7 +327,8 @@
 
 </div>
 
-<script src="app.js?v=9"></script>
+<script src="app.js?v=10"></script>
 </body>
 </html>
+
 
