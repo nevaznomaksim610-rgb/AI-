@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" href="assets/galina-avatar.png">
 <link rel="preload" href="assets/montserrat-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/montserrat-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="styles.css?v=18">
+<link rel="stylesheet" href="styles.css?v=19">
 </head>
 <body>
 
@@ -206,7 +206,7 @@
             <div class="modal__body" data-modal-body></div>
 
             <div class="modal__foot">
-              <div class="modal__input">
+              <div class="modal__input" onclick="handleModalInputClick(event)">
                 <button class="plus-btn" aria-label="Прикрепить">
                   <svg viewBox="0 0 24 24" class="ic ic--plus">
                     <line x1="12" y1="4.5" x2="12" y2="19.5"/>
@@ -216,6 +216,7 @@
                 <div class="modal__field"
                      contenteditable="true"
                      data-modal-field
+                     onkeydown="handleModalFieldKeydown(event)"
                      data-placeholder=""></div>
                 <button class="send-btn send-btn--modal" onclick="sendModal()" aria-label="Отправить">
                   <svg viewBox="0 0 24 24" class="ic ic--send">
@@ -622,7 +623,7 @@
 
 </div>
 
-<script src="app.js?v=17"></script>
+<script src="app.js?v=18"></script>
 </body>
 </html>
 

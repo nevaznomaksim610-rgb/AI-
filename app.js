@@ -287,7 +287,7 @@ document.addEventListener('input', function(e){
 
 /* поле хранит только текст — чистим вставку из буфера */
 document.addEventListener('paste', function(e){
-  var field = e.target.closest && e.target.closest('[data-field]');
+  var field = e.target.closest && e.target.closest('[data-field], [data-modal-field]');
   if(!field) return;
   e.preventDefault();
   var text = (e.clipboardData || window.clipboardData).getData('text');
@@ -300,6 +300,10 @@ document.addEventListener('paste', function(e){
 var REVIEW_TEXT = 'Неплохой AI-помощник. Помог разобраться с процедурой банкротства ' +
                   'физических лиц. Иногда зависает при загрузке документов, но разработчики, ' +
                   'надеюсь, исправят. По качеству ответов — твёрдая четвёрка. Рекомендую попробовать.';
+
+var currentModalKey = null;
+var reviewRating = 0;
+var reviewThanksTimer = null;
 
 function stars(filled){
   var s = '';
@@ -362,9 +366,128 @@ var MODALS = {
   }
 };
 
+function reviewFormMarkup(){
+  var buttons = '';
+  for(var i = 1; i <= 5; i++){
+    buttons += '<button type="button" class="review-rating__star" data-review-rating="' + i + '" ' +
+                 'role="radio" aria-checked="false" aria-label="' + i + ' из 5" onclick="setReviewRating(' + i + ')">' +
+                 '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+                   '<path d="M12 2.7l2.85 5.78 6.38.93-4.62 4.5 1.09 6.36L12 17.28l-5.7 2.99 1.09-6.36-4.62-4.5 6.38-.93z"/>' +
+                 '</svg>' +
+               '</button>';
+  }
+  return '<div class="review-form">' +
+           '<p class="review-form__question">Насколько Вам понравилось приложение?</p>' +
+           '<div class="review-rating" role="radiogroup" aria-label="Оценка приложения">' + buttons + '</div>' +
+         '</div>';
+}
+
+function openReviewForm(){
+  var modal = $('.modal');
+  currentModalKey = 'reviews';
+  reviewRating = 0;
+
+  modal.classList.remove('modal--review-thanks');
+  modal.classList.add('modal--review-form');
+  $('[data-modal-title]').textContent = 'Оставить отзыв';
+  $('[data-modal-body]').innerHTML = reviewFormMarkup();
+
+  var input = $('.modal__input');
+  input.classList.remove('is-review-trigger');
+
+  var field = $('[data-modal-field]');
+  field.textContent = '';
+  field.setAttribute('contenteditable', 'true');
+  field.setAttribute('role', 'textbox');
+  field.setAttribute('aria-label', 'Текст отзыва');
+  field.setAttribute('data-placeholder', 'Напишите отзыв');
+
+  var note = $('[data-modal-note]');
+  note.textContent = MODALS.reviews.note;
+  note.classList.remove('is-error');
+}
+
+function handleModalInputClick(e){
+  var modal = $('.modal');
+  if(currentModalKey === 'reviews' &&
+     !modal.classList.contains('modal--review-form') &&
+     !modal.classList.contains('modal--review-thanks')){
+    e.preventDefault();
+    openReviewForm();
+  }
+}
+
+function handleModalFieldKeydown(e){
+  if(currentModalKey === 'reviews' &&
+     !$('.modal').classList.contains('modal--review-form') &&
+     (e.key === 'Enter' || e.key === ' ')){
+    e.preventDefault();
+    openReviewForm();
+  }
+}
+
+function setReviewRating(value){
+  reviewRating = value;
+  document.querySelectorAll('[data-review-rating]').forEach(function(button){
+    var buttonValue = Number(button.getAttribute('data-review-rating'));
+    var active = buttonValue <= value;
+    button.classList.toggle('is-active', active);
+    button.setAttribute('aria-checked', buttonValue === value ? 'true' : 'false');
+  });
+  $('[data-modal-note]').textContent = MODALS.reviews.note;
+  $('[data-modal-note]').classList.remove('is-error');
+}
+
+function submitReview(){
+  var field = $('[data-modal-field]');
+  var text = field.textContent.replace(/\u00a0/g, ' ').trim();
+  var note = $('[data-modal-note]');
+
+  if(!reviewRating){
+    note.textContent = 'Поставьте оценку от 1 до 5 звёзд';
+    note.classList.add('is-error');
+    return;
+  }
+  if(!text){
+    note.textContent = 'Напишите несколько слов о приложении';
+    note.classList.add('is-error');
+    field.focus();
+    return;
+  }
+
+  showReviewThanks();
+}
+
+function showReviewThanks(){
+  var modal = $('.modal');
+  modal.classList.remove('modal--review-form');
+  modal.classList.add('modal--review-thanks');
+  $('[data-modal-title]').textContent = 'Спасибо за отзыв';
+  $('[data-modal-body]').innerHTML = '<div class="review-thanks">' +
+    '<span class="review-thanks__mark" aria-hidden="true">✓</span>' +
+    '<strong>Спасибо за отзыв!</strong>' +
+    '<span>Он будет опубликован после проверки администратором</span>' +
+  '</div>';
+
+  clearTimeout(reviewThanksTimer);
+  reviewThanksTimer = setTimeout(function(){
+    reviewThanksTimer = null;
+    goTo('screen-main');
+    newChat();
+  }, 1600);
+}
+
 function openModal(key){
   var m = MODALS[key];
   if(!m) return;
+
+  clearTimeout(reviewThanksTimer);
+  reviewThanksTimer = null;
+  currentModalKey = key;
+  reviewRating = 0;
+
+  var modal = $('.modal');
+  modal.classList.remove('modal--review-form', 'modal--review-thanks');
 
   $('[data-modal-ic]').innerHTML   = m.icon;
   $('[data-modal-title]').textContent = m.title;
@@ -374,6 +497,13 @@ function openModal(key){
   var field = $('[data-modal-field]');
   field.textContent = '';
   field.setAttribute('data-placeholder', m.placeholder);
+  field.setAttribute('contenteditable', key === 'reviews' ? 'false' : 'true');
+  field.setAttribute('role', key === 'reviews' ? 'button' : 'textbox');
+  field.setAttribute('aria-label', key === 'reviews' ? 'Написать отзыв' : m.placeholder);
+  field.setAttribute('tabindex', '0');
+
+  $('.modal__input').classList.toggle('is-review-trigger', key === 'reviews');
+  $('[data-modal-note]').classList.remove('is-error');
 
   $('[data-modal-body]').scrollTop = 0;
   $('.modal').classList.add('is-open');
@@ -387,13 +517,24 @@ function openReviews(){
 }
 
 function closeModal(){
+  clearTimeout(reviewThanksTimer);
+  reviewThanksTimer = null;
+  currentModalKey = null;
+  reviewRating = 0;
   $('.modal').classList.remove('is-open');
+  $('.modal').classList.remove('modal--review-form', 'modal--review-thanks');
   $('.modal').setAttribute('aria-hidden', 'true');
   $('.modal-scrim').classList.remove('is-open');
 }
 
-/* отправка тут фиктивная — просто очищаем поле */
 function sendModal(){
+  if(currentModalKey === 'reviews'){
+    if(!$('.modal').classList.contains('modal--review-form')) openReviewForm();
+    else submitReview();
+    return;
+  }
+
+  /* отправка в остальных окнах фиктивная — просто очищаем поле */
   $('[data-modal-field]').textContent = '';
 }
 
