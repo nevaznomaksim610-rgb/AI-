@@ -191,13 +191,22 @@ body{
 .brand__suffix{ display:none; }
 
 .balance{
+  border:0;
+  font-family:inherit;
+  color:var(--ink);
+  cursor:pointer;
   background:var(--grey-bg);
   border-radius:999px;
-  padding:9px 16px;
-  font-size:17px;
-  font-weight:700;
-  letter-spacing:.5px;
+  padding:7px 15px 7px 12px;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  font-size:19px;
+  font-weight:500;
+  letter-spacing:.2px;
 }
+.ic--wallet{ width:22px; height:22px; stroke-width:1.8; }
+.ic__dot{ fill:var(--ink); stroke:none; }
 
 /* ---- иконки (общие правила) ---- */
 .ic{
@@ -1129,7 +1138,8 @@ body{
     letter-spacing:-.5px;
     color:var(--green);
   }
-  .balance{ font-size:16px; padding:9px 17px; }
+  .balance{ font-size:20px; padding:8px 17px 8px 13px; }
+  .ic--wallet{ width:24px; height:24px; }
 
   /* ---- стартовый вид: приветствие и поле по центру ---- */
   .main-center{
@@ -1199,8 +1209,16 @@ body{
     border-radius:26px;
     padding:20px 26px 26px;
     transform:translate(-50%,-46%);
+    /* по центру экрана сдвигом уже не спрятать — гасим прозрачностью */
+    opacity:0;
+    visibility:hidden;
+    transition:opacity .22s ease, transform .22s ease, visibility .22s;
   }
-  .sheet.is-open{ transform:translate(-50%,-50%); }
+  .sheet.is-open{
+    transform:translate(-50%,-50%);
+    opacity:1;
+    visibility:visible;
+  }
   .screen--main.no-sidebar .sheet{ left:50%; }
   .sheet__grab{ display:none; }
   .sheet__balance{ margin-top:24px; }
@@ -1271,7 +1289,14 @@ body{
                 <span class="brand__suffix">Юрист</span>
               </span>
             </div>
-            <button class="balance" onclick="openSheet()">30₽</button>
+            <button class="balance" onclick="openSheet()" aria-label="Баланс 30 рублей">
+                <svg viewBox="0 0 24 24" class="ic ic--wallet">
+                  <path d="M3.4 9.6V7.3a2.3 2.3 0 012.3-2.3h9.9"/>
+                  <rect x="3.4" y="8.9" width="16.3" height="10.1" rx="2.6"/>
+                  <circle cx="15.4" cy="14" r="1.05" class="ic__dot"/>
+                </svg>
+                <span>30</span>
+              </button>
           </header>
 
           <!-- центр: стартовый вид -->
@@ -1463,7 +1488,14 @@ body{
                   <path d="M14.5 5 L7.5 12 l7 7"/>
                 </svg>
               </button>
-              <button class="balance" onclick="openSheet()">30₽</button>
+              <button class="balance" onclick="openSheet()" aria-label="Баланс 30 рублей">
+                <svg viewBox="0 0 24 24" class="ic ic--wallet">
+                  <path d="M3.4 9.6V7.3a2.3 2.3 0 012.3-2.3h9.9"/>
+                  <rect x="3.4" y="8.9" width="16.3" height="10.1" rx="2.6"/>
+                  <circle cx="15.4" cy="14" r="1.05" class="ic__dot"/>
+                </svg>
+                <span>30</span>
+              </button>
             </header>
 
             <div class="call__body">
@@ -1502,7 +1534,14 @@ body{
                   <path d="M14.5 5 L7.5 12 l7 7"/>
                 </svg>
               </button>
-              <button class="balance" onclick="openSheet()">30₽</button>
+              <button class="balance" onclick="openSheet()" aria-label="Баланс 30 рублей">
+                <svg viewBox="0 0 24 24" class="ic ic--wallet">
+                  <path d="M3.4 9.6V7.3a2.3 2.3 0 012.3-2.3h9.9"/>
+                  <rect x="3.4" y="8.9" width="16.3" height="10.1" rx="2.6"/>
+                  <circle cx="15.4" cy="14" r="1.05" class="ic__dot"/>
+                </svg>
+                <span>30</span>
+              </button>
             </header>
             <div class="page__scroll">
               <h2 class="page__title" data-page-title></h2>
@@ -2180,6 +2219,7 @@ document.addEventListener('keydown', function(e){
 </script>
 </body>
 </html>
+
 
 
 

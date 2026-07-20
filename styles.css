@@ -180,13 +180,22 @@ body{
 .brand__suffix{ display:none; }
 
 .balance{
+  border:0;
+  font-family:inherit;
+  color:var(--ink);
+  cursor:pointer;
   background:var(--grey-bg);
   border-radius:999px;
-  padding:9px 16px;
-  font-size:17px;
-  font-weight:700;
-  letter-spacing:.5px;
+  padding:7px 15px 7px 12px;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  font-size:19px;
+  font-weight:500;
+  letter-spacing:.2px;
 }
+.ic--wallet{ width:22px; height:22px; stroke-width:1.8; }
+.ic__dot{ fill:var(--ink); stroke:none; }
 
 /* ---- иконки (общие правила) ---- */
 .ic{
@@ -1118,7 +1127,8 @@ body{
     letter-spacing:-.5px;
     color:var(--green);
   }
-  .balance{ font-size:16px; padding:9px 17px; }
+  .balance{ font-size:20px; padding:8px 17px 8px 13px; }
+  .ic--wallet{ width:24px; height:24px; }
 
   /* ---- стартовый вид: приветствие и поле по центру ---- */
   .main-center{
@@ -1188,8 +1198,16 @@ body{
     border-radius:26px;
     padding:20px 26px 26px;
     transform:translate(-50%,-46%);
+    /* по центру экрана сдвигом уже не спрятать — гасим прозрачностью */
+    opacity:0;
+    visibility:hidden;
+    transition:opacity .22s ease, transform .22s ease, visibility .22s;
   }
-  .sheet.is-open{ transform:translate(-50%,-50%); }
+  .sheet.is-open{
+    transform:translate(-50%,-50%);
+    opacity:1;
+    visibility:visible;
+  }
   .screen--main.no-sidebar .sheet{ left:50%; }
   .sheet__grab{ display:none; }
   .sheet__balance{ margin-top:24px; }

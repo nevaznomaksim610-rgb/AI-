@@ -8,7 +8,7 @@
 <title>ИИ Юрист Галина</title>
 <link rel="icon" href="assets/galina-avatar.png">
 <link rel="apple-touch-icon" href="assets/galina-avatar.png">
-<link rel="stylesheet" href="styles.css?v=13">
+<link rel="stylesheet" href="styles.css?v=14">
 </head>
 <body>
 
@@ -57,7 +57,14 @@
                 <span class="brand__suffix">Юрист</span>
               </span>
             </div>
-            <button class="balance" onclick="openSheet()">30₽</button>
+            <button class="balance" onclick="openSheet()" aria-label="Баланс 30 рублей">
+                <svg viewBox="0 0 24 24" class="ic ic--wallet">
+                  <path d="M3.4 9.6V7.3a2.3 2.3 0 012.3-2.3h9.9"/>
+                  <rect x="3.4" y="8.9" width="16.3" height="10.1" rx="2.6"/>
+                  <circle cx="15.4" cy="14" r="1.05" class="ic__dot"/>
+                </svg>
+                <span>30</span>
+              </button>
           </header>
 
           <!-- центр: стартовый вид -->
@@ -249,7 +256,14 @@
                   <path d="M14.5 5 L7.5 12 l7 7"/>
                 </svg>
               </button>
-              <button class="balance" onclick="openSheet()">30₽</button>
+              <button class="balance" onclick="openSheet()" aria-label="Баланс 30 рублей">
+                <svg viewBox="0 0 24 24" class="ic ic--wallet">
+                  <path d="M3.4 9.6V7.3a2.3 2.3 0 012.3-2.3h9.9"/>
+                  <rect x="3.4" y="8.9" width="16.3" height="10.1" rx="2.6"/>
+                  <circle cx="15.4" cy="14" r="1.05" class="ic__dot"/>
+                </svg>
+                <span>30</span>
+              </button>
             </header>
 
             <div class="call__body">
@@ -288,7 +302,14 @@
                   <path d="M14.5 5 L7.5 12 l7 7"/>
                 </svg>
               </button>
-              <button class="balance" onclick="openSheet()">30₽</button>
+              <button class="balance" onclick="openSheet()" aria-label="Баланс 30 рублей">
+                <svg viewBox="0 0 24 24" class="ic ic--wallet">
+                  <path d="M3.4 9.6V7.3a2.3 2.3 0 012.3-2.3h9.9"/>
+                  <rect x="3.4" y="8.9" width="16.3" height="10.1" rx="2.6"/>
+                  <circle cx="15.4" cy="14" r="1.05" class="ic__dot"/>
+                </svg>
+                <span>30</span>
+              </button>
             </header>
             <div class="page__scroll">
               <h2 class="page__title" data-page-title></h2>
@@ -371,9 +392,10 @@
 
 </div>
 
-<script src="app.js?v=13"></script>
+<script src="app.js?v=14"></script>
 </body>
 </html>
+
 
 
 
