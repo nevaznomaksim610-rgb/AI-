@@ -22,7 +22,7 @@ function applyTheme(theme, persist){
   document.documentElement.style.colorScheme = next;
 
   var meta = document.getElementById('theme-color-meta');
-  if(meta) meta.setAttribute('content', next === 'dark' ? '#111512' : '#4C9F52');
+  if(meta) meta.setAttribute('content', next === 'dark' ? '#111512' : '#FFFFFF');
 
   document.querySelectorAll('[data-theme-toggle]').forEach(function(button){
     button.setAttribute('aria-checked', next === 'dark' ? 'true' : 'false');
