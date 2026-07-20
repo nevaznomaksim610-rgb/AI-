@@ -295,6 +295,103 @@ document.addEventListener('paste', function(e){
 });
 
 /* =========================================================
+   ОКНА РАЗДЕЛОВ: Поддержка / Отзывы / Почта
+   ========================================================= */
+var REVIEW_TEXT = 'Неплохой AI-помощник. Помог разобраться с процедурой банкротства ' +
+                  'физических лиц. Иногда зависает при загрузке документов, но разработчики, ' +
+                  'надеюсь, исправят. По качеству ответов — твёрдая четвёрка. Рекомендую попробовать.';
+
+function stars(filled){
+  var s = '';
+  for(var i = 1; i <= 5; i++){
+    s += i <= filled ? '★' : '<i>★</i>';
+  }
+  return s;
+}
+
+function review(name, filled){
+  return '<div class="review">' +
+           '<div class="review__top">' +
+             '<span class="review__ava">A</span>' +
+             '<span class="review__name">' + name + '</span>' +
+             '<span class="review__stars">' + stars(filled) + '</span>' +
+           '</div>' +
+           '<div class="review__text">' + REVIEW_TEXT + '</div>' +
+         '</div>';
+}
+
+var MODALS = {
+  support: {
+    title: 'Поддержка',
+    icon: '<svg viewBox="0 0 24 24" class="ic">' +
+            '<path d="M4.2 15.4v-3.6a7.8 7.8 0 1115.6 0v3.6"/>' +
+            '<rect x="2.6" y="13.6" width="4" height="6" rx="2"/>' +
+            '<rect x="17.4" y="13.6" width="4" height="6" rx="2"/>' +
+          '</svg>',
+    body: 'Привет! Я технический помощник Windexs. ' +
+          'Буду несказанно рад ответить на твои вопросы',
+    placeholder: 'Тут вы можете задать свой вопрос',
+    note: ''
+  },
+
+  reviews: {
+    title: 'Отзывы',
+    icon: '<svg viewBox="0 0 24 24" class="ic">' +
+            '<path d="M12 3.2l2.7 5.5 6 .9-4.3 4.2 1 6-5.4-2.8-5.4 2.8 1-6L3.3 9.6l6-.9z"/>' +
+          '</svg>',
+    body: review('Антон Григорьев', 5) +
+          review('Антон Григорьев', 3) +
+          review('Антон Григорьев', 5) +
+          review('Антон Григорьев', 5) +
+          review('Антон Григорьев', 5) +
+          review('Антон Григорьев', 4),
+    placeholder: 'Напишите отзыв',
+    note: '*Отзыв будет опубликован после проверки администратором'
+  },
+
+  mail: {
+    title: 'Почта',
+    icon: '<svg viewBox="0 0 24 24" class="ic">' +
+            '<rect x="2.8" y="5" width="18.4" height="14" rx="3"/>' +
+            '<path d="M3.6 7.4L12 13.4l8.4-6"/>' +
+          '</svg>',
+    body: 'Пришлём готовые документы и ответы Галины на вашу почту — ' +
+          'чтобы не искать их в переписке. Укажите адрес, на который отправлять.',
+    placeholder: 'Введите адрес почты',
+    note: '*Письма приходят с адреса no-reply@windexs.ru'
+  }
+};
+
+function openModal(key){
+  var m = MODALS[key];
+  if(!m) return;
+
+  $('[data-modal-ic]').innerHTML   = m.icon;
+  $('[data-modal-title]').textContent = m.title;
+  $('[data-modal-body]').innerHTML = m.body;
+  $('[data-modal-note]').textContent = m.note;
+
+  var field = $('[data-modal-field]');
+  field.textContent = '';
+  field.setAttribute('data-placeholder', m.placeholder);
+
+  $('[data-modal-body]').scrollTop = 0;
+  $('.modal').classList.add('is-open');
+  $('.modal-scrim').classList.add('is-open');
+  closeDrawer();
+}
+
+function closeModal(){
+  $('.modal').classList.remove('is-open');
+  $('.modal-scrim').classList.remove('is-open');
+}
+
+/* отправка тут фиктивная — просто очищаем поле */
+function sendModal(){
+  $('[data-modal-field]').textContent = '';
+}
+
+/* =========================================================
    ШТОРКА С ТАРИФОМ
    ========================================================= */
 function openSheet(){
@@ -361,96 +458,14 @@ function toggleMic(){
 }
 
 /* =========================================================
-   РАЗДЕЛЫ МЕНЮ
+   СТРАНИЦА ДОКУМЕНТА (открывается из «Мои договоры»)
    ========================================================= */
-var PAGES = {
-  consult: {
-    title: 'Консультация',
-    body:
-      '<p class="page__lead">Если вопрос сложный — подключим живого юриста. ' +
-      'Галина передаст ему всю переписку, повторять ничего не придётся.</p>' +
-      card('Онлайн-консультация', '1 500 ₽', 'Разговор 30 минут в чате или по видео. Ответ в течение часа.') +
-      card('Разбор документа', '2 500 ₽', 'Юрист вычитает договор, выпишет риски и предложит правки.') +
-      card('Сопровождение сделки', 'от 7 000 ₽', 'Ведём сделку от проверки контрагента до подписания.') +
-      '<div class="page-actions"><button class="btn-solid">Записаться</button></div>'
-  },
-
-  news: {
-    title: 'Новости',
-    body:
-      '<p class="page__lead">Что изменилось в законах за последнюю неделю.</p>' +
-      news('20 июля 2026', 'Новые правила удалённой работы',
-           'В ТК РФ уточнили порядок перевода сотрудника на удалёнку без его согласия.') +
-      news('18 июля 2026', 'Поправки к 44-ФЗ приняты в третьем чтении',
-           'Сроки оплаты по госконтрактам сокращают с 15 до 7 рабочих дней.') +
-      news('15 июля 2026', 'Верховный суд — о спорах по аренде',
-           'Разъяснено, когда арендатор вправе съехать без штрафа.') +
-      news('11 июля 2026', 'Регистрация ИП — по новому порядку',
-           'Подать документы можно через приложение банка, госпошлина отменена.')
-  },
-
-  reviews: {
-    title: 'Отзывы',
-    body:
-      '<div class="rating">' +
-        '<div class="rating__num">4,8</div>' +
-        '<div><div class="rating__stars">★★★★★</div>' +
-        '<div class="rating__count">1 240 оценок</div></div>' +
-      '</div>' +
-      review('Марина К.', '★★★★★', 'Составила заявление на возврат товара за пять минут. В магазине приняли без вопросов.') +
-      review('Дмитрий О.', '★★★★★', 'Проверил договор аренды — Галина нашла пункт про автопродление, который я пропустил.') +
-      review('Алексей В.', '★★★★☆', 'Отвечает быстро и по делу. По узким вопросам всё же пришлось идти к живому юристу.') +
-      review('Ольга С.', '★★★★★', 'Удобно, что можно голосом. Спросила по дороге с работы, ответ пришёл сразу.') +
-      '<div class="page-actions"><button class="btn-ghost">Оставить отзыв</button></div>'
-  },
-
-  support: {
-    title: 'Поддержка',
-    body:
-      '<p class="page__lead">Отвечаем с 9:00 до 21:00 по Москве, обычно в течение 10 минут.</p>' +
-      card('Как пополнить счёт?', '', 'Кнопка «Пополнить» в блоке с балансом. Оплата картой или через СБП.') +
-      card('Списали деньги, а ответа нет', '', 'Напишите нам — вернём списание за неудавшийся запрос.') +
-      card('Можно ли использовать ответ в суде?', '', 'Галина готовит проект документа. Перед подачей его стоит показать юристу.') +
-      card('Как удалить переписку?', '', 'Долгое нажатие на чат в боковом меню — «Удалить».') +
-      '<div class="page-actions">' +
-        '<button class="btn-ghost">Написать в чат</button>' +
-        '<button class="btn-solid">Позвонить</button>' +
-      '</div>'
-  }
-};
-
-function card(name, price, desc){
-  return '<div class="card"><div class="card__top">' +
-           '<div class="card__name">' + name + '</div>' +
-           (price ? '<div class="card__price">' + price + '</div>' : '') +
-         '</div><div class="card__desc">' + desc + '</div></div>';
-}
-
-function news(date, title, desc){
-  return '<div class="card">' +
-           '<div class="card__date">' + date + '</div>' +
-           '<div class="card__name" style="margin-top:4px">' + title + '</div>' +
-           '<div class="card__desc">' + desc + '</div></div>';
-}
-
-function review(name, stars, text){
-  return '<div class="card"><div class="card__top">' +
-           '<div class="card__name">' + name + '</div>' +
-           '<div class="rating__stars">' + stars + '</div>' +
-         '</div><div class="card__desc">' + text + '</div></div>';
-}
-
 function showPage(title, body){
   $('[data-page-title]').textContent = title;
   $('[data-page-body]').innerHTML = body;
   $('.page__scroll').scrollTop = 0;
   $('.page').classList.add('is-open');
   closeDrawer();
-}
-
-function openPage(key){
-  var p = PAGES[key];
-  if(p) showPage(p.title, p.body);
 }
 
 function closePage(){ $('.page').classList.remove('is-open'); }
@@ -491,6 +506,7 @@ function newChat(){
   closeDrawer();
   closePage();
   closeCall();
+  closeModal();
   clearTimeout(callTimer);
 
   feed().innerHTML = '';
@@ -549,5 +565,7 @@ document.addEventListener('click', function(e){
 
 /* Esc закрывает всё */
 document.addEventListener('keydown', function(e){
-  if(e.key === 'Escape'){ closeAttach(); closeDrawer(); closeSheet(); closePage(); closeCall(); }
+  if(e.key === 'Escape'){
+    closeAttach(); closeDrawer(); closeSheet(); closePage(); closeCall(); closeModal();
+  }
 });

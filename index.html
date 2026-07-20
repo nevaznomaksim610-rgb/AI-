@@ -8,7 +8,7 @@
 <title>ИИ Юрист Галина</title>
 <link rel="icon" href="assets/galina-avatar.png">
 <link rel="apple-touch-icon" href="assets/galina-avatar.png">
-<link rel="stylesheet" href="styles.css?v=11">
+<link rel="stylesheet" href="styles.css?v=12">
 </head>
 <body>
 
@@ -49,8 +49,10 @@
                   <line x1="9.6" y1="3.2" x2="9.6" y2="20.8"/>
                 </svg>
               </button>
-              <img src="assets/windex-logo.png" alt="" class="brand__logo">
-              <span class="brand__name">windex</span>
+              <span class="brand" aria-label="Windexs">
+                <img src="assets/windex-mark.png" alt="" class="brand__mark">
+                <span class="brand__name">indexs</span>
+              </span>
             </div>
             <button class="balance" onclick="openSheet()">30₽</button>
           </header>
@@ -173,6 +175,45 @@
             </div>
           </div>
 
+          <!-- ОКНО РАЗДЕЛА: Поддержка / Отзывы / Почта -->
+          <div class="modal-scrim" onclick="closeModal()"></div>
+          <div class="modal">
+            <div class="modal__head">
+              <span class="modal__ic" data-modal-ic></span>
+              <span class="modal__title" data-modal-title></span>
+              <button class="modal__x" onclick="closeModal()" aria-label="Закрыть">
+                <svg viewBox="0 0 24 24" class="ic ic--x">
+                  <line x1="5.5" y1="5.5" x2="18.5" y2="18.5"/>
+                  <line x1="18.5" y1="5.5" x2="5.5" y2="18.5"/>
+                </svg>
+              </button>
+            </div>
+
+            <div class="modal__body" data-modal-body></div>
+
+            <div class="modal__foot">
+              <div class="modal__input">
+                <button class="plus-btn" aria-label="Прикрепить">
+                  <svg viewBox="0 0 24 24" class="ic ic--plus">
+                    <line x1="12" y1="4.5" x2="12" y2="19.5"/>
+                    <line x1="4.5" y1="12" x2="19.5" y2="12"/>
+                  </svg>
+                </button>
+                <div class="modal__field"
+                     contenteditable="true"
+                     data-modal-field
+                     data-placeholder=""></div>
+                <button class="send-btn send-btn--modal" onclick="sendModal()" aria-label="Отправить">
+                  <svg viewBox="0 0 24 24" class="ic ic--send">
+                    <line x1="12" y1="20" x2="12" y2="5"/>
+                    <path d="M6 11l6-6 6 6"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="modal__note" data-modal-note></div>
+            </div>
+          </div>
+
           <!-- МИНИ-ЭКРАН ЗАГРУЗКИ ФАЙЛА -->
           <div class="upload">
             <div class="upload__card">
@@ -288,29 +329,7 @@
             </div>
 
             <div class="drawer__foot">
-              <a class="drawer__link" onclick="openPage('consult')">
-                <svg viewBox="0 0 24 24" class="ic ic--consult">
-                  <path d="M3.2 5.6h11.2v8.4H7.4L3.2 17.2z"/>
-                  <path d="M9.6 9.2h11.2v8.4l-4.2 3.2v-3.2h-3.5"/>
-                </svg>
-                Консультация
-              </a>
-              <a class="drawer__link" onclick="openPage('news')">
-                <svg viewBox="0 0 24 24" class="ic ic--news">
-                  <rect x="3.2" y="4.2" width="17.6" height="15.6" rx="2.6"/>
-                  <line x1="6.6" y1="8.4" x2="14" y2="8.4"/>
-                  <line x1="6.6" y1="12" x2="17.4" y2="12"/>
-                  <line x1="6.6" y1="15.6" x2="17.4" y2="15.6"/>
-                </svg>
-                Новости
-              </a>
-              <a class="drawer__link" onclick="openPage('reviews')">
-                <svg viewBox="0 0 24 24" class="ic ic--star">
-                  <path d="M12 3.2l2.7 5.5 6 .9-4.3 4.2 1 6-5.4-2.8-5.4 2.8 1-6L3.3 9.6l6-.9z"/>
-                </svg>
-                Отзывы
-              </a>
-              <a class="drawer__link" onclick="openPage('support')">
+              <a class="drawer__link" onclick="openModal('support')">
                 <svg viewBox="0 0 24 24" class="ic ic--support">
                   <path d="M4.2 15.4v-3.6a7.8 7.8 0 1115.6 0v3.6"/>
                   <rect x="2.6" y="13.6" width="4" height="6" rx="2"/>
@@ -318,6 +337,22 @@
                 </svg>
                 Поддержка
               </a>
+              <a class="drawer__link" onclick="openModal('reviews')">
+                <svg viewBox="0 0 24 24" class="ic ic--star">
+                  <path d="M12 3.2l2.7 5.5 6 .9-4.3 4.2 1 6-5.4-2.8-5.4 2.8 1-6L3.3 9.6l6-.9z"/>
+                </svg>
+                Отзывы
+              </a>
+              <a class="drawer__link" onclick="openModal('mail')">
+                <svg viewBox="0 0 24 24" class="ic ic--mail">
+                  <rect x="2.8" y="5" width="18.4" height="14" rx="3"/>
+                  <path d="M3.6 7.4L12 13.4l8.4-6"/>
+                </svg>
+                Почта
+              </a>
+            </div>
+
+            <div class="drawer__newchat">
               <button class="btn-newchat" onclick="newChat()">
                 <svg viewBox="0 0 24 24" class="ic ic--chat">
                   <path d="M3.4 5.4h17.2v11H9.2l-5.8 4.2z"/>
@@ -331,9 +366,10 @@
 
 </div>
 
-<script src="app.js?v=11"></script>
+<script src="app.js?v=12"></script>
 </body>
 </html>
+
 
 
 
