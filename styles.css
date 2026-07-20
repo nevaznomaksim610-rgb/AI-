@@ -156,6 +156,15 @@ body{
   display:flex; align-items:center; justify-content:center;
 }
 
+/* кнопка меню + логотип справа от неё */
+.topbar__left{ display:flex; align-items:center; gap:10px; }
+.brand__logo{ width:28px; height:28px; display:block; flex:none; }
+.brand__name{
+  font-size:17px;
+  font-weight:700;
+  letter-spacing:-.2px;
+}
+
 .balance{
   background:var(--grey-bg);
   border-radius:999px;
