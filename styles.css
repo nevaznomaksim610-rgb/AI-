@@ -880,6 +880,125 @@ body{
 .logout .ic{ stroke:#B03A34; width:22px; height:22px; }
 .logout:hover{ background:#FDF6F5; }
 
+/* =========================================================
+   ОКНО ПОПОЛНЕНИЯ
+   ========================================================= */
+.topup-scrim{
+  position:absolute;
+  top:0; right:0; bottom:0; left:0;
+  background:rgba(255,255,255,.45);
+  -webkit-backdrop-filter:blur(9px);
+          backdrop-filter:blur(9px);
+  opacity:0; visibility:hidden;
+  transition:opacity .22s ease, visibility .22s;
+  z-index:20;
+}
+.topup-scrim.is-open{ opacity:1; visibility:visible; }
+
+.topup{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-46%);
+  width:88%;
+  background:#fff;
+  border-radius:26px;
+  box-shadow:0 20px 54px rgba(0,0,0,.20);
+  padding:18px 16px 18px;
+  opacity:0; visibility:hidden;
+  transition:opacity .22s ease, transform .22s ease, visibility .22s;
+  z-index:21;
+}
+.topup.is-open{
+  opacity:1; visibility:visible;
+  transform:translate(-50%,-50%);
+}
+
+.topup__head{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding:0 34px 16px;
+}
+.topup__head .ic--wallet{ width:27px; height:27px; }
+.topup__title{ font-size:21px; font-weight:600; letter-spacing:-.2px; }
+.topup__x{
+  position:absolute;
+  right:2px; top:-1px;
+  border:0; background:none; padding:0;
+  cursor:pointer;
+  display:flex;
+}
+.topup__x .ic{ width:24px; height:24px; stroke-width:2.6; }
+
+/* быстрые суммы */
+.topup__quick{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:9px;
+  margin-bottom:14px;
+}
+.quick{
+  border:1.5px solid #E8E8E8;
+  background:#fff;
+  border-radius:999px;
+  padding:9px 0;
+  font-family:inherit;
+  font-size:16px;
+  font-weight:500;
+  color:var(--ink);
+  cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,.05);
+}
+.quick:hover{ border-color:#CFCFCF; }
+.quick.is-active{ border-color:var(--green); color:var(--green); }
+
+/* карточки внутри окна — без кнопки, кликается вся карточка */
+.plans--topup .plan{
+  background:#fff;
+  cursor:pointer;
+  font-family:inherit;
+  color:var(--ink);
+  text-align:center;
+  padding:14px 8px 14px;
+}
+.plans--topup .plan--hit{ padding-top:20px; }
+.plans--topup .plan.is-active{ border-color:var(--green); }
+
+/* «Вы сохраните» */
+.topup__save{
+  margin:14px 0 12px;
+  background:#A8E6A3;
+  border-radius:999px;
+  padding:7px 0;
+  text-align:center;
+  font-size:14px;
+  font-weight:600;
+  color:#173F1C;
+}
+.topup__save:empty{ display:none; }
+
+/* поле суммы */
+.topup__input{
+  background:var(--grey-bubble);
+  border-radius:999px;
+  padding:7px 7px 7px 18px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.topup__field{
+  flex:1;
+  min-width:0;
+  font-size:17px;
+  font-weight:500;
+  outline:none;
+  white-space:nowrap;
+  overflow:hidden;
+}
+
 /* ---- мини-экран загрузки файла ---- */
 .upload{
   position:absolute;
@@ -1452,6 +1571,17 @@ body{
     max-height:560px;
   }
   .screen--main.no-sidebar .modal{ left:50%; }
+
+  /* окно пополнения — тоже по центру рабочей области */
+  .topup{
+    left:calc(50% + 170px);
+    width:520px;
+    padding:20px 22px 22px;
+  }
+  .screen--main.no-sidebar .topup{ left:50%; }
+  .quick{ font-size:17px; padding:10px 0; }
+  .topup__save{ font-size:15px; padding:8px 0; }
+  .topup__field{ font-size:18px; }
   .modal__body{ font-size:15.5px; }
   .review__text{ font-size:12px; }
   .review__name{ font-size:14px; }

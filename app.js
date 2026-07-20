@@ -414,6 +414,57 @@ function closeAllPanels(){
 }
 
 /* =========================================================
+   ОКНО ПОПОЛНЕНИЯ
+   ========================================================= */
+
+/* чем больше сумма, тем выше скидка */
+function topupDiscount(amount){
+  if(amount >= 5000) return 20;
+  if(amount >= 3000) return 15;
+  if(amount >= 1000) return 10;
+  return 0;
+}
+
+function openTopup(amount){
+  setTopup(amount || 1000);
+  $('.topup').classList.add('is-open');
+  $('.topup-scrim').classList.add('is-open');
+}
+
+function closeTopup(){
+  $('.topup').classList.remove('is-open');
+  $('.topup-scrim').classList.remove('is-open');
+}
+
+/* выбор суммы кнопкой или карточкой */
+function setTopup(amount){
+  $('[data-topup-field]').textContent = amount;
+  refreshTopup();
+}
+
+/* пересчёт скидки и подсветка выбранного варианта */
+function refreshTopup(){
+  var raw = ($('[data-topup-field]').textContent || '').replace(/\D/g, '');
+  var amount = parseInt(raw, 10) || 0;
+  var saved = Math.round(amount * topupDiscount(amount) / 100);
+
+  $('[data-topup-save]').textContent = saved ? 'Вы сохраните ' + saved + '₽' : '';
+
+  document.querySelectorAll('.topup .quick').forEach(function(b){
+    b.classList.toggle('is-active', parseInt(b.textContent, 10) === amount);
+  });
+  document.querySelectorAll('.plans--topup .plan').forEach(function(p){
+    var tier = parseInt(p.querySelector('.plan__price').textContent.replace(/\D/g, ''), 10);
+    p.classList.toggle('is-active', amount >= tier && topupDiscount(amount) === topupDiscount(tier));
+  });
+}
+
+/* сумму вводят руками — пересчитываем на лету */
+document.addEventListener('input', function(e){
+  if(e.target.closest && e.target.closest('[data-topup-field]')) refreshTopup();
+});
+
+/* =========================================================
    ШТОРКА С ТАРИФОМ
    ========================================================= */
 function openSheet(){
@@ -530,6 +581,7 @@ function newChat(){
   closeCall();
   closeModal();
   closeAllPanels();
+  closeTopup();
   clearTimeout(callTimer);
 
   feed().innerHTML = '';
@@ -609,6 +661,6 @@ document.addEventListener('click', function(e){
 document.addEventListener('keydown', function(e){
   if(e.key === 'Escape'){
     closeAttach(); closeDrawer(); closeSheet(); closePage();
-    closeCall(); closeModal(); closeAllPanels();
+    closeCall(); closeModal(); closeAllPanels(); closeTopup();
   }
 });

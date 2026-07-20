@@ -8,7 +8,7 @@
 <title>ИИ Юрист Галина</title>
 <link rel="icon" href="assets/galina-avatar.png">
 <link rel="apple-touch-icon" href="assets/galina-avatar.png">
-<link rel="stylesheet" href="styles.css?v=15">
+<link rel="stylesheet" href="styles.css?v=16">
 </head>
 <body>
 
@@ -270,7 +270,7 @@
                   </span>
                   <div class="plan__price">от 1000₽</div>
                   <div class="plan__save">экономия 10%</div>
-                  <button class="plan__btn">Пополнить</button>
+                  <button class="plan__btn" onclick="openTopup(1000)">Пополнить</button>
                 </div>
 
                 <div class="plan plan--hit">
@@ -289,7 +289,7 @@
                   </span>
                   <div class="plan__price">от 3000₽</div>
                   <div class="plan__save">экономия 15%</div>
-                  <button class="plan__btn">Пополнить</button>
+                  <button class="plan__btn" onclick="openTopup(3000)">Пополнить</button>
                 </div>
 
                 <div class="plan">
@@ -302,7 +302,7 @@
                   </span>
                   <div class="plan__price">от 5000₽</div>
                   <div class="plan__save">экономия 20%</div>
-                  <button class="plan__btn">Пополнить</button>
+                  <button class="plan__btn" onclick="openTopup(5000)">Пополнить</button>
                 </div>
               </div>
 
@@ -371,6 +371,89 @@
             </div>
           </div>
 
+          <!-- ОКНО ПОПОЛНЕНИЯ -->
+          <div class="topup-scrim" onclick="closeTopup()"></div>
+          <div class="topup">
+            <div class="topup__head">
+              <svg viewBox="0 0 24 24" class="ic ic--wallet">
+                <path d="M3.4 9.6V7.3a2.3 2.3 0 012.3-2.3h9.9"/>
+                <rect x="3.4" y="8.9" width="16.3" height="10.1" rx="2.6"/>
+                <circle cx="15.4" cy="14" r="1.05" class="ic__dot"/>
+              </svg>
+              <span class="topup__title">Пополнение</span>
+              <button class="topup__x" onclick="closeTopup()" aria-label="Закрыть">
+                <svg viewBox="0 0 24 24" class="ic ic--x">
+                  <line x1="5.5" y1="5.5" x2="18.5" y2="18.5"/>
+                  <line x1="18.5" y1="5.5" x2="5.5" y2="18.5"/>
+                </svg>
+              </button>
+            </div>
+
+            <div class="topup__quick">
+              <button class="quick" onclick="setTopup(100)">100₽</button>
+              <button class="quick" onclick="setTopup(300)">300₽</button>
+              <button class="quick" onclick="setTopup(500)">500₽</button>
+            </div>
+
+            <div class="plans plans--topup">
+              <button class="plan" onclick="setTopup(1000)">
+                <span class="plan__ic">
+                  <svg viewBox="0 0 24 24" class="ic ic--coin">
+                    <ellipse cx="12" cy="8.4" rx="7.4" ry="3.4"/>
+                    <path d="M4.6 8.4v7.2c0 1.9 3.3 3.4 7.4 3.4s7.4-1.5 7.4-3.4V8.4"/>
+                  </svg>
+                </span>
+                <span class="plan__price">от 1000₽</span>
+                <span class="plan__save">экономия 10%</span>
+              </button>
+
+              <button class="plan plan--hit" onclick="setTopup(3000)">
+                <span class="plan__badge">
+                  <svg viewBox="0 0 24 24" class="ic ic--fire">
+                    <path d="M12 2.6c3.4 3.6 6.6 6 6.6 10.4a6.6 6.6 0 11-13.2 0c0-2.2 1-3.8 2.4-5.4.6 1.4 1.4 2.2 2.4 2.4-.4-3 .6-5.4 1.8-7.4z"/>
+                  </svg>
+                  Хит
+                </span>
+                <span class="plan__ic">
+                  <svg viewBox="0 0 24 24" class="ic ic--coins">
+                    <ellipse cx="12" cy="6.4" rx="6.6" ry="2.8"/>
+                    <path d="M5.4 6.4v3.2c0 1.5 3 2.8 6.6 2.8s6.6-1.3 6.6-2.8V6.4"/>
+                    <path d="M5.4 12.4v3.2c0 1.5 3 2.8 6.6 2.8s6.6-1.3 6.6-2.8v-3.2"/>
+                  </svg>
+                </span>
+                <span class="plan__price">от 3000₽</span>
+                <span class="plan__save">экономия 15%</span>
+              </button>
+
+              <button class="plan" onclick="setTopup(5000)">
+                <span class="plan__ic">
+                  <svg viewBox="0 0 24 24" class="ic ic--gem">
+                    <path d="M5.4 4.6h13.2l3 5-9.6 10.4L2.4 9.6z"/>
+                    <path d="M2.4 9.6h19.2"/>
+                    <path d="M9 4.6l-1.6 5 4.6 10.4 4.6-10.4-1.6-5"/>
+                  </svg>
+                </span>
+                <span class="plan__price">от 5000₽</span>
+                <span class="plan__save">экономия 20%</span>
+              </button>
+            </div>
+
+            <div class="topup__save" data-topup-save></div>
+
+            <div class="topup__input">
+              <div class="topup__field"
+                   contenteditable="true"
+                   data-topup-field
+                   inputmode="numeric">1000</div>
+              <button class="send-btn send-btn--modal" onclick="closeTopup()" aria-label="Пополнить">
+                <svg viewBox="0 0 24 24" class="ic ic--send">
+                  <line x1="12" y1="20" x2="12" y2="5"/>
+                  <path d="M6 11l6-6 6 6"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
           <!-- МИНИ-ЭКРАН ЗАГРУЗКИ ФАЙЛА -->
           <div class="upload">
             <div class="upload__card">
@@ -390,7 +473,7 @@
               <b>30 ₽</b>
             </div>
             <div class="sheet__hint">Хватит на 10 запросов</div>
-            <button class="btn-primary btn-primary--sm">Пополнить</button>
+            <button class="btn-primary btn-primary--sm" onclick="openTopup(1000)">Пополнить</button>
           </div>
 
           <!-- ЭКРАН СОЗВОНА -->
@@ -537,9 +620,10 @@
 
 </div>
 
-<script src="app.js?v=15"></script>
+<script src="app.js?v=16"></script>
 </body>
 </html>
+
 
 
 

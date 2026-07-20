@@ -891,6 +891,125 @@ body{
 .logout .ic{ stroke:#B03A34; width:22px; height:22px; }
 .logout:hover{ background:#FDF6F5; }
 
+/* =========================================================
+   ОКНО ПОПОЛНЕНИЯ
+   ========================================================= */
+.topup-scrim{
+  position:absolute;
+  top:0; right:0; bottom:0; left:0;
+  background:rgba(255,255,255,.45);
+  -webkit-backdrop-filter:blur(9px);
+          backdrop-filter:blur(9px);
+  opacity:0; visibility:hidden;
+  transition:opacity .22s ease, visibility .22s;
+  z-index:20;
+}
+.topup-scrim.is-open{ opacity:1; visibility:visible; }
+
+.topup{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-46%);
+  width:88%;
+  background:#fff;
+  border-radius:26px;
+  box-shadow:0 20px 54px rgba(0,0,0,.20);
+  padding:18px 16px 18px;
+  opacity:0; visibility:hidden;
+  transition:opacity .22s ease, transform .22s ease, visibility .22s;
+  z-index:21;
+}
+.topup.is-open{
+  opacity:1; visibility:visible;
+  transform:translate(-50%,-50%);
+}
+
+.topup__head{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding:0 34px 16px;
+}
+.topup__head .ic--wallet{ width:27px; height:27px; }
+.topup__title{ font-size:21px; font-weight:600; letter-spacing:-.2px; }
+.topup__x{
+  position:absolute;
+  right:2px; top:-1px;
+  border:0; background:none; padding:0;
+  cursor:pointer;
+  display:flex;
+}
+.topup__x .ic{ width:24px; height:24px; stroke-width:2.6; }
+
+/* быстрые суммы */
+.topup__quick{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:9px;
+  margin-bottom:14px;
+}
+.quick{
+  border:1.5px solid #E8E8E8;
+  background:#fff;
+  border-radius:999px;
+  padding:9px 0;
+  font-family:inherit;
+  font-size:16px;
+  font-weight:500;
+  color:var(--ink);
+  cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,.05);
+}
+.quick:hover{ border-color:#CFCFCF; }
+.quick.is-active{ border-color:var(--green); color:var(--green); }
+
+/* карточки внутри окна — без кнопки, кликается вся карточка */
+.plans--topup .plan{
+  background:#fff;
+  cursor:pointer;
+  font-family:inherit;
+  color:var(--ink);
+  text-align:center;
+  padding:14px 8px 14px;
+}
+.plans--topup .plan--hit{ padding-top:20px; }
+.plans--topup .plan.is-active{ border-color:var(--green); }
+
+/* «Вы сохраните» */
+.topup__save{
+  margin:14px 0 12px;
+  background:#A8E6A3;
+  border-radius:999px;
+  padding:7px 0;
+  text-align:center;
+  font-size:14px;
+  font-weight:600;
+  color:#173F1C;
+}
+.topup__save:empty{ display:none; }
+
+/* поле суммы */
+.topup__input{
+  background:var(--grey-bubble);
+  border-radius:999px;
+  padding:7px 7px 7px 18px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.topup__field{
+  flex:1;
+  min-width:0;
+  font-size:17px;
+  font-weight:500;
+  outline:none;
+  white-space:nowrap;
+  overflow:hidden;
+}
+
 /* ---- мини-экран загрузки файла ---- */
 .upload{
   position:absolute;
@@ -1463,6 +1582,17 @@ body{
     max-height:560px;
   }
   .screen--main.no-sidebar .modal{ left:50%; }
+
+  /* окно пополнения — тоже по центру рабочей области */
+  .topup{
+    left:calc(50% + 170px);
+    width:520px;
+    padding:20px 22px 22px;
+  }
+  .screen--main.no-sidebar .topup{ left:50%; }
+  .quick{ font-size:17px; padding:10px 0; }
+  .topup__save{ font-size:15px; padding:8px 0; }
+  .topup__field{ font-size:18px; }
   .modal__body{ font-size:15.5px; }
   .review__text{ font-size:12px; }
   .review__name{ font-size:14px; }
@@ -1772,7 +1902,7 @@ body{
                   </span>
                   <div class="plan__price">от 1000₽</div>
                   <div class="plan__save">экономия 10%</div>
-                  <button class="plan__btn">Пополнить</button>
+                  <button class="plan__btn" onclick="openTopup(1000)">Пополнить</button>
                 </div>
 
                 <div class="plan plan--hit">
@@ -1791,7 +1921,7 @@ body{
                   </span>
                   <div class="plan__price">от 3000₽</div>
                   <div class="plan__save">экономия 15%</div>
-                  <button class="plan__btn">Пополнить</button>
+                  <button class="plan__btn" onclick="openTopup(3000)">Пополнить</button>
                 </div>
 
                 <div class="plan">
@@ -1804,7 +1934,7 @@ body{
                   </span>
                   <div class="plan__price">от 5000₽</div>
                   <div class="plan__save">экономия 20%</div>
-                  <button class="plan__btn">Пополнить</button>
+                  <button class="plan__btn" onclick="openTopup(5000)">Пополнить</button>
                 </div>
               </div>
 
@@ -1873,6 +2003,89 @@ body{
             </div>
           </div>
 
+          <!-- ОКНО ПОПОЛНЕНИЯ -->
+          <div class="topup-scrim" onclick="closeTopup()"></div>
+          <div class="topup">
+            <div class="topup__head">
+              <svg viewBox="0 0 24 24" class="ic ic--wallet">
+                <path d="M3.4 9.6V7.3a2.3 2.3 0 012.3-2.3h9.9"/>
+                <rect x="3.4" y="8.9" width="16.3" height="10.1" rx="2.6"/>
+                <circle cx="15.4" cy="14" r="1.05" class="ic__dot"/>
+              </svg>
+              <span class="topup__title">Пополнение</span>
+              <button class="topup__x" onclick="closeTopup()" aria-label="Закрыть">
+                <svg viewBox="0 0 24 24" class="ic ic--x">
+                  <line x1="5.5" y1="5.5" x2="18.5" y2="18.5"/>
+                  <line x1="18.5" y1="5.5" x2="5.5" y2="18.5"/>
+                </svg>
+              </button>
+            </div>
+
+            <div class="topup__quick">
+              <button class="quick" onclick="setTopup(100)">100₽</button>
+              <button class="quick" onclick="setTopup(300)">300₽</button>
+              <button class="quick" onclick="setTopup(500)">500₽</button>
+            </div>
+
+            <div class="plans plans--topup">
+              <button class="plan" onclick="setTopup(1000)">
+                <span class="plan__ic">
+                  <svg viewBox="0 0 24 24" class="ic ic--coin">
+                    <ellipse cx="12" cy="8.4" rx="7.4" ry="3.4"/>
+                    <path d="M4.6 8.4v7.2c0 1.9 3.3 3.4 7.4 3.4s7.4-1.5 7.4-3.4V8.4"/>
+                  </svg>
+                </span>
+                <span class="plan__price">от 1000₽</span>
+                <span class="plan__save">экономия 10%</span>
+              </button>
+
+              <button class="plan plan--hit" onclick="setTopup(3000)">
+                <span class="plan__badge">
+                  <svg viewBox="0 0 24 24" class="ic ic--fire">
+                    <path d="M12 2.6c3.4 3.6 6.6 6 6.6 10.4a6.6 6.6 0 11-13.2 0c0-2.2 1-3.8 2.4-5.4.6 1.4 1.4 2.2 2.4 2.4-.4-3 .6-5.4 1.8-7.4z"/>
+                  </svg>
+                  Хит
+                </span>
+                <span class="plan__ic">
+                  <svg viewBox="0 0 24 24" class="ic ic--coins">
+                    <ellipse cx="12" cy="6.4" rx="6.6" ry="2.8"/>
+                    <path d="M5.4 6.4v3.2c0 1.5 3 2.8 6.6 2.8s6.6-1.3 6.6-2.8V6.4"/>
+                    <path d="M5.4 12.4v3.2c0 1.5 3 2.8 6.6 2.8s6.6-1.3 6.6-2.8v-3.2"/>
+                  </svg>
+                </span>
+                <span class="plan__price">от 3000₽</span>
+                <span class="plan__save">экономия 15%</span>
+              </button>
+
+              <button class="plan" onclick="setTopup(5000)">
+                <span class="plan__ic">
+                  <svg viewBox="0 0 24 24" class="ic ic--gem">
+                    <path d="M5.4 4.6h13.2l3 5-9.6 10.4L2.4 9.6z"/>
+                    <path d="M2.4 9.6h19.2"/>
+                    <path d="M9 4.6l-1.6 5 4.6 10.4 4.6-10.4-1.6-5"/>
+                  </svg>
+                </span>
+                <span class="plan__price">от 5000₽</span>
+                <span class="plan__save">экономия 20%</span>
+              </button>
+            </div>
+
+            <div class="topup__save" data-topup-save></div>
+
+            <div class="topup__input">
+              <div class="topup__field"
+                   contenteditable="true"
+                   data-topup-field
+                   inputmode="numeric">1000</div>
+              <button class="send-btn send-btn--modal" onclick="closeTopup()" aria-label="Пополнить">
+                <svg viewBox="0 0 24 24" class="ic ic--send">
+                  <line x1="12" y1="20" x2="12" y2="5"/>
+                  <path d="M6 11l6-6 6 6"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
           <!-- МИНИ-ЭКРАН ЗАГРУЗКИ ФАЙЛА -->
           <div class="upload">
             <div class="upload__card">
@@ -1892,7 +2105,7 @@ body{
               <b>30 ₽</b>
             </div>
             <div class="sheet__hint">Хватит на 10 запросов</div>
-            <button class="btn-primary btn-primary--sm">Пополнить</button>
+            <button class="btn-primary btn-primary--sm" onclick="openTopup(1000)">Пополнить</button>
           </div>
 
           <!-- ЭКРАН СОЗВОНА -->
@@ -2456,6 +2669,57 @@ function closeAllPanels(){
 }
 
 /* =========================================================
+   ОКНО ПОПОЛНЕНИЯ
+   ========================================================= */
+
+/* чем больше сумма, тем выше скидка */
+function topupDiscount(amount){
+  if(amount >= 5000) return 20;
+  if(amount >= 3000) return 15;
+  if(amount >= 1000) return 10;
+  return 0;
+}
+
+function openTopup(amount){
+  setTopup(amount || 1000);
+  $('.topup').classList.add('is-open');
+  $('.topup-scrim').classList.add('is-open');
+}
+
+function closeTopup(){
+  $('.topup').classList.remove('is-open');
+  $('.topup-scrim').classList.remove('is-open');
+}
+
+/* выбор суммы кнопкой или карточкой */
+function setTopup(amount){
+  $('[data-topup-field]').textContent = amount;
+  refreshTopup();
+}
+
+/* пересчёт скидки и подсветка выбранного варианта */
+function refreshTopup(){
+  var raw = ($('[data-topup-field]').textContent || '').replace(/\D/g, '');
+  var amount = parseInt(raw, 10) || 0;
+  var saved = Math.round(amount * topupDiscount(amount) / 100);
+
+  $('[data-topup-save]').textContent = saved ? 'Вы сохраните ' + saved + '₽' : '';
+
+  document.querySelectorAll('.topup .quick').forEach(function(b){
+    b.classList.toggle('is-active', parseInt(b.textContent, 10) === amount);
+  });
+  document.querySelectorAll('.plans--topup .plan').forEach(function(p){
+    var tier = parseInt(p.querySelector('.plan__price').textContent.replace(/\D/g, ''), 10);
+    p.classList.toggle('is-active', amount >= tier && topupDiscount(amount) === topupDiscount(tier));
+  });
+}
+
+/* сумму вводят руками — пересчитываем на лету */
+document.addEventListener('input', function(e){
+  if(e.target.closest && e.target.closest('[data-topup-field]')) refreshTopup();
+});
+
+/* =========================================================
    ШТОРКА С ТАРИФОМ
    ========================================================= */
 function openSheet(){
@@ -2572,6 +2836,7 @@ function newChat(){
   closeCall();
   closeModal();
   closeAllPanels();
+  closeTopup();
   clearTimeout(callTimer);
 
   feed().innerHTML = '';
@@ -2651,13 +2916,14 @@ document.addEventListener('click', function(e){
 document.addEventListener('keydown', function(e){
   if(e.key === 'Escape'){
     closeAttach(); closeDrawer(); closeSheet(); closePage();
-    closeCall(); closeModal(); closeAllPanels();
+    closeCall(); closeModal(); closeAllPanels(); closeTopup();
   }
 });
 
 </script>
 </body>
 </html>
+
 
 
 
