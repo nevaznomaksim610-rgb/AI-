@@ -128,7 +128,7 @@ body{
   max-width:100%;
 }
 
-.ob-footer{ padding:0 22px 30px; flex:none; }
+.ob-footer{ padding:0 22px 46px; flex:none; }
 
 .btn-primary{
   width:100%;
@@ -379,6 +379,7 @@ body{
   display:flex;
   flex-direction:column;
   gap:14px;
+  cursor:text;
 }
 /* редактируемое поле: префикс режима рисуется через ::before,
    поэтому переносится вместе с текстом и не редактируется */
@@ -1762,6 +1763,6 @@ body{
 /* ---------- безопасные зоны на телефонах с вырезом ---------- */
 @supports (padding:env(safe-area-inset-bottom)){
   .composer-wrap{ padding-bottom:calc(26px + env(safe-area-inset-bottom)); }
-  .ob-footer   { padding-bottom:calc(30px + env(safe-area-inset-bottom)); }
+  .ob-footer   { padding-bottom:calc(46px + env(safe-area-inset-bottom)); }
   .topbar      { padding-top:env(safe-area-inset-top); height:calc(64px + env(safe-area-inset-top)); }
 }

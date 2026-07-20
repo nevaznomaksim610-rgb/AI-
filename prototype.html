@@ -141,7 +141,7 @@ body{
   max-width:100%;
 }
 
-.ob-footer{ padding:0 22px 30px; flex:none; }
+.ob-footer{ padding:0 22px 46px; flex:none; }
 
 .btn-primary{
   width:100%;
@@ -392,6 +392,7 @@ body{
   display:flex;
   flex-direction:column;
   gap:14px;
+  cursor:text;
 }
 /* редактируемое поле: префикс режима рисуется через ::before,
    поэтому переносится вместе с текстом и не редактируется */
@@ -1775,7 +1776,7 @@ body{
 /* ---------- безопасные зоны на телефонах с вырезом ---------- */
 @supports (padding:env(safe-area-inset-bottom)){
   .composer-wrap{ padding-bottom:calc(26px + env(safe-area-inset-bottom)); }
-  .ob-footer   { padding-bottom:calc(30px + env(safe-area-inset-bottom)); }
+  .ob-footer   { padding-bottom:calc(46px + env(safe-area-inset-bottom)); }
   .topbar      { padding-top:env(safe-area-inset-top); height:calc(64px + env(safe-area-inset-top)); }
 }
 
@@ -1878,7 +1879,7 @@ body{
 
           <!-- поле ввода -->
           <div class="composer-wrap">
-            <div class="composer">
+            <div class="composer" onclick="focusComposer(event)">
               <div class="composer__files" data-files></div>
               <div class="composer__field"
                    contenteditable="true"
@@ -2680,6 +2681,13 @@ document.addEventListener('input', function(e){
   if(e.target.closest && e.target.closest('[data-field]')) refreshComposer();
 });
 
+function focusComposer(e){
+  if(e.target.closest && e.target.closest('button, .file-chip')) return;
+  var composer = e.currentTarget;
+  var field = composer && composer.querySelector('[data-field]');
+  if(field && !composer.classList.contains('is-busy')) field.focus();
+}
+
 /* поле хранит только текст — чистим вставку из буфера */
 document.addEventListener('paste', function(e){
   var field = e.target.closest && e.target.closest('[data-field], [data-modal-field]');
@@ -3010,8 +3018,7 @@ document.addEventListener('input', function(e){
    ШТОРКА С ТАРИФОМ
    ========================================================= */
 function openSheet(){
-  $('.sheet').classList.add('is-open');
-  $('.sheet-scrim').classList.add('is-open');
+  openTopup(1000);
 }
 function closeSheet(){
   $('.sheet').classList.remove('is-open');

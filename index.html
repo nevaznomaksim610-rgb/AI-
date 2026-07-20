@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" href="assets/galina-avatar.png">
 <link rel="preload" href="assets/montserrat-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/montserrat-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="styles.css?v=19">
+<link rel="stylesheet" href="styles.css?v=20">
 </head>
 <body>
 
@@ -109,7 +109,7 @@
 
           <!-- поле ввода -->
           <div class="composer-wrap">
-            <div class="composer">
+            <div class="composer" onclick="focusComposer(event)">
               <div class="composer__files" data-files></div>
               <div class="composer__field"
                    contenteditable="true"
@@ -623,7 +623,7 @@
 
 </div>
 
-<script src="app.js?v=18"></script>
+<script src="app.js?v=19"></script>
 </body>
 </html>
 

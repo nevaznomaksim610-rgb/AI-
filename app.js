@@ -285,6 +285,13 @@ document.addEventListener('input', function(e){
   if(e.target.closest && e.target.closest('[data-field]')) refreshComposer();
 });
 
+function focusComposer(e){
+  if(e.target.closest && e.target.closest('button, .file-chip')) return;
+  var composer = e.currentTarget;
+  var field = composer && composer.querySelector('[data-field]');
+  if(field && !composer.classList.contains('is-busy')) field.focus();
+}
+
 /* поле хранит только текст — чистим вставку из буфера */
 document.addEventListener('paste', function(e){
   var field = e.target.closest && e.target.closest('[data-field], [data-modal-field]');
@@ -615,8 +622,7 @@ document.addEventListener('input', function(e){
    ШТОРКА С ТАРИФОМ
    ========================================================= */
 function openSheet(){
-  $('.sheet').classList.add('is-open');
-  $('.sheet-scrim').classList.add('is-open');
+  openTopup(1000);
 }
 function closeSheet(){
   $('.sheet').classList.remove('is-open');
