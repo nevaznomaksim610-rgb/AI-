@@ -3,14 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#4C9F52">
+<meta name="theme-color" content="#4C9F52" id="theme-color-meta">
 <meta name="description" content="ИИ юрист Галина — ответы на юридические вопросы, составление и проверка договоров.">
 <title>ИИ Юрист Галина</title>
 <link rel="icon" href="assets/galina-avatar.png">
 <link rel="apple-touch-icon" href="assets/galina-avatar.png">
 <link rel="preload" href="assets/montserrat-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/montserrat-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="styles.css?v=20">
+<script>
+  (function(){
+    var savedTheme = null;
+    try { savedTheme = localStorage.getItem('windexs-theme'); } catch(e) {}
+    var theme = savedTheme === 'dark' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.style.colorScheme = theme;
+  })();
+</script>
+<link rel="stylesheet" href="styles.css?v=21">
 </head>
 <body>
 
@@ -229,6 +238,56 @@
             </div>
           </div>
 
+          <!-- ПОЧТА: АРХИВ НОВОСТЕЙ -->
+          <div class="mail-scrim" onclick="closeMail()"></div>
+          <section class="mail-modal" role="dialog" aria-modal="true" aria-labelledby="mail-modal-title" aria-hidden="true">
+            <div class="mail-modal__head">
+              <svg viewBox="0 0 24 24" class="ic ic--mail" aria-hidden="true">
+                <rect x="2.8" y="5" width="18.4" height="14" rx="3"/>
+                <path d="M3.6 7.4L12 13.4l8.4-6"/>
+              </svg>
+              <h2 class="mail-modal__title" id="mail-modal-title">Почта</h2>
+              <button class="mail-modal__x" type="button" onclick="closeMail()" aria-label="Закрыть почту">
+                <svg viewBox="0 0 24 24" class="ic ic--x">
+                  <line x1="5.5" y1="5.5" x2="18.5" y2="18.5"/>
+                  <line x1="18.5" y1="5.5" x2="5.5" y2="18.5"/>
+                </svg>
+              </button>
+            </div>
+            <div class="mail-modal__list">
+              <article class="mail-card">
+                <div class="mail-card__head">
+                  <h3 class="mail-card__title">Технические работы</h3>
+                  <time class="mail-card__date" datetime="2026-05-29">
+                    <svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><rect x="3.5" y="5.5" width="17" height="15" rx="3"/><line x1="7.5" y1="3.5" x2="7.5" y2="8"/><line x1="16.5" y1="3.5" x2="16.5" y2="8"/><line x1="3.5" y1="10" x2="20.5" y2="10"/></svg>
+                    29.05.2026
+                  </time>
+                </div>
+                <p>Уважаемые клиенты! Сегодня, 29 мая, на сервисе в течение дня будут проходить технические работы, поэтому работа сервиса будет нестабильна. Команда Windexs.</p>
+              </article>
+              <article class="mail-card">
+                <div class="mail-card__head">
+                  <h3 class="mail-card__title">Технические работы</h3>
+                  <time class="mail-card__date" datetime="2026-04-04">
+                    <svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><rect x="3.5" y="5.5" width="17" height="15" rx="3"/><line x1="7.5" y1="3.5" x2="7.5" y2="8"/><line x1="16.5" y1="3.5" x2="16.5" y2="8"/><line x1="3.5" y1="10" x2="20.5" y2="10"/></svg>
+                    04.04.2026
+                  </time>
+                </div>
+                <p>Уважаемые клиенты, рады сообщить, что сегодня с 13:00 на наши серверы будет загружено важное обновление, улучшающее опыт общения с Галиной и добавляющее несколько важных функций. Поэтому с 13:00 до 20:00 на сервисе будет наблюдаться нестабильная работа. Команда Windexs.</p>
+              </article>
+              <article class="mail-card">
+                <div class="mail-card__head">
+                  <h3 class="mail-card__title">Обновление сервиса</h3>
+                  <time class="mail-card__date" datetime="2026-03-18">
+                    <svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><rect x="3.5" y="5.5" width="17" height="15" rx="3"/><line x1="7.5" y1="3.5" x2="7.5" y2="8"/><line x1="16.5" y1="3.5" x2="16.5" y2="8"/><line x1="3.5" y1="10" x2="20.5" y2="10"/></svg>
+                    18.03.2026
+                  </time>
+                </div>
+                <p>Мы обновили работу с документами: загрузка стала быстрее, а созданные договоры теперь удобнее открывать из истории. Спасибо, что пользуетесь Windexs.</p>
+              </article>
+            </div>
+          </section>
+
           <!-- ЭКРАН НАСТРОЕК -->
           <div class="panel" data-panel="settings">
             <div class="panel__head">
@@ -259,7 +318,17 @@
                 </span>
               </button>
 
-              <div class="settings-row">Тема</div>
+              <div class="settings-row settings-row--theme">
+                <span class="settings-row__copy">
+                  <span class="settings-row__label">Тема</span>
+                  <span class="settings-row__hint" data-theme-label>Светлая</span>
+                </span>
+                <button class="theme-toggle" type="button" role="switch" aria-checked="false" aria-label="Включить тёмную тему" onclick="toggleTheme()" data-theme-toggle>
+                  <span class="theme-toggle__track" aria-hidden="true">
+                    <span class="theme-toggle__thumb"></span>
+                  </span>
+                </button>
+              </div>
 
               <h3 class="settings-title">Пополнение</h3>
 
@@ -600,13 +669,13 @@
                 </svg>
                 Отзывы
               </button>
-              <a class="drawer__link" onclick="openModal('mail')">
+              <button type="button" class="drawer__link drawer__link--button" onclick="openMail()" aria-haspopup="dialog">
                 <svg viewBox="0 0 24 24" class="ic ic--mail">
                   <rect x="2.8" y="5" width="18.4" height="14" rx="3"/>
                   <path d="M3.6 7.4L12 13.4l8.4-6"/>
                 </svg>
                 Почта
-              </a>
+              </button>
             </div>
 
             <div class="drawer__newchat">
@@ -623,7 +692,7 @@
 
 </div>
 
-<script src="app.js?v=19"></script>
+<script src="app.js?v=20"></script>
 </body>
 </html>
 

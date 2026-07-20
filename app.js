@@ -15,6 +15,33 @@ var state = { mode: null, busy: false, files: [], fileSeq: 0 };
 
 function $(sel, root){ return (root || document).querySelector(sel); }
 
+/* ---------- светлая / тёмная тема ---------- */
+function applyTheme(theme, persist){
+  var next = theme === 'dark' ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', next);
+  document.documentElement.style.colorScheme = next;
+
+  var meta = document.getElementById('theme-color-meta');
+  if(meta) meta.setAttribute('content', next === 'dark' ? '#111512' : '#4C9F52');
+
+  document.querySelectorAll('[data-theme-toggle]').forEach(function(button){
+    button.setAttribute('aria-checked', next === 'dark' ? 'true' : 'false');
+    button.setAttribute('aria-label', next === 'dark' ? 'Включить светлую тему' : 'Включить тёмную тему');
+  });
+  document.querySelectorAll('[data-theme-label]').forEach(function(label){
+    label.textContent = next === 'dark' ? 'Тёмная' : 'Светлая';
+  });
+
+  if(persist !== false){
+    try { localStorage.setItem('windexs-theme', next); } catch(e) {}
+  }
+}
+
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme');
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+}
+
 /* ---------- переход между экранами ---------- */
 function goTo(id){
   var target = document.getElementById(id);
@@ -534,6 +561,29 @@ function closeModal(){
   $('.modal-scrim').classList.remove('is-open');
 }
 
+/* Почта — отдельный архив новостей без поля отправки */
+function openMail(){
+  closeModal();
+  closeDrawer();
+  var modal = $('.mail-modal');
+  var scrim = $('.mail-scrim');
+  if(!modal || !scrim) return;
+  modal.querySelector('.mail-modal__list').scrollTop = 0;
+  modal.classList.add('is-open');
+  modal.setAttribute('aria-hidden', 'false');
+  scrim.classList.add('is-open');
+}
+
+function closeMail(){
+  var modal = $('.mail-modal');
+  var scrim = $('.mail-scrim');
+  if(modal){
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+  }
+  if(scrim) scrim.classList.remove('is-open');
+}
+
 function sendModal(){
   if(currentModalKey === 'reviews'){
     if(!$('.modal').classList.contains('modal--review-form')) openReviewForm();
@@ -814,6 +864,21 @@ document.addEventListener('click', function(e){
 document.addEventListener('keydown', function(e){
   if(e.key === 'Escape'){
     closeAttach(); closeDrawer(); closeSheet(); closePage();
-    closeCall(); closeModal(); closeAllPanels(); closeTopup();
+    closeCall(); closeModal(); closeMail(); closeAllPanels(); closeTopup();
   }
 });
+
+/* На компьютерах приложение сразу открывается на главном экране. */
+function skipDesktopOnboarding(){
+  var onboarding = document.getElementById('screen-onboarding');
+  if(isDesktop() && onboarding && onboarding.classList.contains('is-active')){
+    goTo('screen-main');
+  }
+}
+
+applyTheme(document.documentElement.getAttribute('data-theme') || 'light', false);
+skipDesktopOnboarding();
+
+var desktopMedia = window.matchMedia('(min-width:900px)');
+if(desktopMedia.addEventListener) desktopMedia.addEventListener('change', skipDesktopOnboarding);
+else if(desktopMedia.addListener) desktopMedia.addListener(skipDesktopOnboarding);
