@@ -1427,6 +1427,14 @@ body{
   text-decoration:none;
   cursor:pointer;
 }
+.drawer__link--button{
+  width:100%;
+  border:0;
+  background:none;
+  padding:0;
+  font:inherit;
+  text-align:left;
+}
 .drawer__link .ic{ width:22px; height:22px; flex:none; }
 
 /* «Новый чат» вынесен из серого блока, на белом */

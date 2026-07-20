@@ -377,12 +377,18 @@ function openModal(key){
 
   $('[data-modal-body]').scrollTop = 0;
   $('.modal').classList.add('is-open');
+  $('.modal').setAttribute('aria-hidden', 'false');
   $('.modal-scrim').classList.add('is-open');
   closeDrawer();
 }
 
+function openReviews(){
+  openModal('reviews');
+}
+
 function closeModal(){
   $('.modal').classList.remove('is-open');
+  $('.modal').setAttribute('aria-hidden', 'true');
   $('.modal-scrim').classList.remove('is-open');
 }
 

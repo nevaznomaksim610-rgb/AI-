@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" href="assets/galina-avatar.png">
 <link rel="preload" href="assets/montserrat-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/montserrat-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="styles.css?v=17">
+<link rel="stylesheet" href="styles.css?v=18">
 </head>
 <body>
 
@@ -191,10 +191,10 @@
 
           <!-- ОКНО РАЗДЕЛА: Поддержка / Отзывы / Почта -->
           <div class="modal-scrim" onclick="closeModal()"></div>
-          <div class="modal">
+          <div class="modal" id="section-modal" role="dialog" aria-modal="true" aria-labelledby="section-modal-title" aria-hidden="true">
             <div class="modal__head">
               <span class="modal__ic" data-modal-ic></span>
-              <span class="modal__title" data-modal-title></span>
+              <span class="modal__title" id="section-modal-title" data-modal-title></span>
               <button class="modal__x" onclick="closeModal()" aria-label="Закрыть">
                 <svg viewBox="0 0 24 24" class="ic ic--x">
                   <line x1="5.5" y1="5.5" x2="18.5" y2="18.5"/>
@@ -593,12 +593,12 @@
                 </svg>
                 Поддержка
               </a>
-              <a class="drawer__link" onclick="openModal('reviews')">
+              <button type="button" class="drawer__link drawer__link--button" onclick="openReviews()" aria-haspopup="dialog" aria-controls="section-modal">
                 <svg viewBox="0 0 24 24" class="ic ic--star">
                   <path d="M12 3.2l2.7 5.5 6 .9-4.3 4.2 1 6-5.4-2.8-5.4 2.8 1-6L3.3 9.6l6-.9z"/>
                 </svg>
                 Отзывы
-              </a>
+              </button>
               <a class="drawer__link" onclick="openModal('mail')">
                 <svg viewBox="0 0 24 24" class="ic ic--mail">
                   <rect x="2.8" y="5" width="18.4" height="14" rx="3"/>
@@ -622,7 +622,7 @@
 
 </div>
 
-<script src="app.js?v=16"></script>
+<script src="app.js?v=17"></script>
 </body>
 </html>
 
