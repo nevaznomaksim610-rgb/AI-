@@ -454,7 +454,7 @@ body{
   color:#6E6E6E;
 }
 .sheet__balance{
-  margin-top:auto;
+  margin-top:26px;
   display:flex; align-items:baseline; justify-content:space-between;
   font-size:16px; font-weight:500;
 }
